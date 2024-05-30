@@ -221,7 +221,7 @@ require('lazy').setup({
         require("mason").setup() -- Mason setup must run before csharp
         require("csharp").setup()
     end
-  }
+  },
   -- NOTE: Plugins can specify dependencies.
   --
   -- The dependencies are proper plugin specifications as well - anything
