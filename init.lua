@@ -9,7 +9,7 @@ vim.g.have_nerd_font = false
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
--- NOTE: You can change these options as you wish!
+-- NOTE: You can change these options as you wish!ƒ
 --  For more options, you can see `:help option-list`
 
 -- Make line numbers default
@@ -209,7 +209,7 @@ require('lazy').setup({
       }, { mode = 'v' })
     end,
   },
-  { 'rose-pine/neovim', name = 'rose-pine' },
+  { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
   {
     "iabdelkareem/csharp.nvim",
     dependencies = {
@@ -711,7 +711,7 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'rose-pine'
+      vim.cmd.colorscheme 'catppuccin-mocha'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
