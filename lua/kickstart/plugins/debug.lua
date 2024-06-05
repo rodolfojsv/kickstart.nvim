@@ -20,7 +20,7 @@ return {
     -- Installs the debug adapters for you
     'williamboman/mason.nvim',
     'jay-babu/mason-nvim-dap.nvim',
-
+    'csharp.nvim',
     -- Add your own debuggers here
     'leoluz/nvim-dap-go',
   },
@@ -44,6 +44,9 @@ return {
         'delve',
       },
     }
+
+    vim.keymap.set('n', '<leader><F5>', require('csharp').run_project, { desc = 'Start application' })
+    vim.keymap.set('n', '<leader><F6>', require('csharp').debug_project, { desc = 'Start application' })
 
     -- Basic debugging keymaps, feel free to change to your liking!
     vim.keymap.set('n', '<F5>', dap.continue, { desc = 'Debug: Start/Continue' })
