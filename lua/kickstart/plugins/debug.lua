@@ -20,9 +20,9 @@ return {
     -- Installs the debug adapters for you
     'williamboman/mason.nvim',
     'jay-babu/mason-nvim-dap.nvim',
-    'csharp.nvim',
     -- Add your own debuggers here
     'leoluz/nvim-dap-go',
+    'nicholasmata/nvim-dap-cs',
   },
   config = function()
     local dap = require 'dap'
@@ -45,9 +45,6 @@ return {
       },
     }
 
-    vim.keymap.set('n', '<leader><F5>', require('csharp').run_project, { desc = 'Start application' })
-    vim.keymap.set('n', '<leader><F6>', require('csharp').debug_project, { desc = 'Start application' })
-
     -- Basic debugging keymaps, feel free to change to your liking!
     vim.keymap.set('n', '<F5>', dap.continue, { desc = 'Debug: Start/Continue' })
     vim.keymap.set('n', '<F1>', dap.step_into, { desc = 'Debug: Step Into' })
@@ -58,6 +55,9 @@ return {
       dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
     end, { desc = 'Debug: Set Breakpoint' })
 
+    vim.keymap.set('n', '<leader>?', function()
+      require('dapui').eval(nil, { enter = true })
+    end)
     -- Dap UI setup
     -- For more information, see |:help nvim-dap-ui|
     dapui.setup {
@@ -95,5 +95,7 @@ return {
         detached = vim.fn.has 'win32' == 0,
       },
     }
+
+    require('dap-cs').setup()
   end,
 }

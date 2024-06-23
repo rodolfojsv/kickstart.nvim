@@ -1,4 +1,4 @@
--- Set <space> as the leader key
+--Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
@@ -194,18 +194,6 @@ require('lazy').setup({
       require('which-key').register({
         ['<leader>h'] = { 'Git [H]unk' },
       }, { mode = 'v' })
-    end,
-  },
-  {
-    'iabdelkareem/csharp.nvim',
-    dependencies = {
-      'williamboman/mason.nvim', -- Required, automatically installs omnisharp
-      'mfussenegger/nvim-dap',
-      'Tastyep/structlog.nvim', -- Optional, but highly recommended for debugging
-    },
-    config = function()
-      require('mason').setup() -- Mason setup must run before csharp
-      require('csharp').setup()
     end,
   },
   -- NOTE: Plugins can specify dependencies.
@@ -480,6 +468,7 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- clangd = {},
+        csharp_ls = {},
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
