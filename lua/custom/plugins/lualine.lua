@@ -1,12 +1,12 @@
 return {
   'hoob3rt/lualine.nvim',
   dependencies = {
-    'rose-pine/neovim',
+    'folke/tokyonight.nvim',
   },
   config = function()
     require('lualine').setup {
       options = {
-        theme = 'rose-pine',
+        theme = 'tokyonight-moon',
         globalstatus = true,
       },
       sections = {
