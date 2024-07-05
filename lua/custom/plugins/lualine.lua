@@ -4,6 +4,11 @@ return {
     'folke/tokyonight.nvim',
   },
   config = function()
+    local nvimbattery = {
+      function()
+        return require('battery').get_status_line()
+      end,
+    }
     require('lualine').setup {
       options = {
         theme = 'tokyonight-night',
@@ -19,7 +24,8 @@ return {
             shortening_target = 70,
           },
         },
-        lualine_x = { 'encoding', 'fileformat', 'filetype' },
+        lualine_x = { 'encoding', 'filetype' },
+        lualine_y = nvimbattery,
         lualine_z = { 'location' },
       },
       tabline = {
