@@ -12,7 +12,7 @@ return {
         show_hidden = true,
         natural_order = true,
         is_always_hidden = function(name, _)
-          return name == '..' or name == '.git'
+          return name == '..' or name == '.git' or name == '.DS_Store' or name == '.vs' or name == '.vscode'
         end,
       },
       win_options = {
