@@ -10,7 +10,10 @@ return {
   'tpope/vim-unimpaired',
   'justinhj/battery.nvim',
   config = function()
-    require('battery').setup {}
+    require('battery').setup {
+      show_percent = true,
+      show_plugged_icon = true,
+    }
   end,
   { 'kyazdani42/nvim-web-devicons', lazy = true },
   { 'aymericbeaumet/vim-symlink', dependencies = { 'moll/vim-bbye' } },
