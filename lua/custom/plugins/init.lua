@@ -8,6 +8,10 @@ return {
   'tpope/vim-repeat',
   'tpope/vim-surround',
   'tpope/vim-unimpaired',
+  'justinhj/battery.nvim',
+  config = function()
+    require('battery').setup {}
+  end,
   { 'kyazdani42/nvim-web-devicons', lazy = true },
   { 'aymericbeaumet/vim-symlink', dependencies = { 'moll/vim-bbye' } },
 

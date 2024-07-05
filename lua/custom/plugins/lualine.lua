@@ -4,9 +4,16 @@ return {
     'folke/tokyonight.nvim',
   },
   config = function()
+    --TODO: probably easier to check this while on battery.
+    local nvimbattery = {
+      function()
+        return require('battery').get_status_line()
+      end,
+      -- color = { fg = colors.violet, bg = colors.bg },
+    }
     require('lualine').setup {
       options = {
-        theme = 'tokyonight-moon',
+        theme = 'tokyonight-night',
         globalstatus = true,
       },
       sections = {
