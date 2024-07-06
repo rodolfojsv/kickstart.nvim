@@ -9,4 +9,6 @@ return {
   vim.keymap.set('v', '<C-S-j>', ":m '>+1<CR>gv=gv"), -- move line up(v)
   vim.keymap.set('n', '<C-S-j>', ':m .+1<CR>=='), -- move line up(n)
   vim.keymap.set('v', '<C-S-k>', ":m '<-2<CR>gv=gv"), -- move line down(v)
+  vim.keymap.set('n', '<leader><C-n>', '<cmd>cnext<CR>zz', { desc = 'Next item on quickfix list' }),
+  vim.keymap.set('n', '<leader><C-p>', '<cmd>cprev<CR>zz', { desc = 'Previous item on quickfix list' }),
 }

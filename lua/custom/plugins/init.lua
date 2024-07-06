@@ -2,7 +2,9 @@
 --  I promise not to create any merge conflicts in this directory :)
 --
 -- See the kickstart.nvim README for more information
+vim.opt.conceallevel = 1
 return {
+
   'godlygeek/tabular',
   'tpope/vim-eunuch',
   'tpope/vim-repeat',
