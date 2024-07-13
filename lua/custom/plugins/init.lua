@@ -4,7 +4,8 @@
 -- See the kickstart.nvim README for more information
 vim.opt.conceallevel = 1
 return {
-
+  'rcarriga/nvim-notify',
+  'mvllow/stand.nvim',
   'godlygeek/tabular',
   'tpope/vim-eunuch',
   'tpope/vim-repeat',
