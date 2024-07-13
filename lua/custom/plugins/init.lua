@@ -10,6 +10,7 @@ return {
   'tpope/vim-repeat',
   'tpope/vim-surround',
   'tpope/vim-unimpaired',
+  'tris203/precognition.nvim',
   'justinhj/battery.nvim',
   'rodolfojsv/reminders.nvim',
   config = function()
