@@ -5,14 +5,13 @@
 vim.opt.conceallevel = 1
 return {
   'rcarriga/nvim-notify',
-  'mvllow/stand.nvim',
   'godlygeek/tabular',
   'tpope/vim-eunuch',
   'tpope/vim-repeat',
   'tpope/vim-surround',
   'tpope/vim-unimpaired',
   'justinhj/battery.nvim',
-  'rodolfojsv/water.nvim',
+  'rodolfojsv/reminders.nvim',
   config = function()
     require('battery').setup {
       show_percent = true,
