@@ -12,6 +12,7 @@ return {
   'tpope/vim-surround',
   'tpope/vim-unimpaired',
   'justinhj/battery.nvim',
+  'rodolfojsv/water.nvim',
   config = function()
     require('battery').setup {
       show_percent = true,
