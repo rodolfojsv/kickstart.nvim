@@ -13,4 +13,6 @@ return {
   vim.keymap.set('n', '<leader><C-p>', '<cmd>cprev<CR>zz', { desc = 'Previous item on quickfix list' }),
   vim.keymap.set('n', '<leader>prt', ":lua require('precognition').toggle()<CR>", { desc = '[Pr]ecognition [t]oggle' }),
   vim.keymap.set('x', '<leader>p', [["_dP]]),
+  vim.keymap.set('n', '<C-S-a>', '<C-a>'),
+  vim.keymap.set('n', '<C-S-x>', '<C-x>'),
 }
