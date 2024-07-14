@@ -12,7 +12,7 @@ return {
   'tpope/vim-unimpaired',
   'tris203/precognition.nvim',
   'justinhj/battery.nvim',
-  'rodolfojsv/reminders.nvim',
+  { 'rodolfojsv/reminders.nvim', branch = 'main' },
   config = function()
     require('battery').setup {
       show_percent = true,
