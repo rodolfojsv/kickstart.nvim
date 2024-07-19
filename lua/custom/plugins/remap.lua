@@ -15,10 +15,10 @@ return {
   vim.keymap.set('x', '<leader>p', [["_dP]]),
   vim.keymap.set('n', '<C-S-a>', '<C-a>'),
   vim.keymap.set('n', '<C-S-x>', '<C-x>'),
-  vim.keymap.set('i', '<F19>', function()
+  vim.keymap.set('i', '<F18>', function()
     require('luasnip').jump(1)
   end),
-  vim.keymap.set('i', '<F18>', function()
+  vim.keymap.set('i', '<F19>', function()
     require('luasnip').jump(-1)
   end),
   vim.keymap.set('i', '<F16>', function()
@@ -31,10 +31,10 @@ return {
       require('luasnip').change_choice(-1)
     end
   end),
-  vim.keymap.set('s', '<F19>', function()
+  vim.keymap.set('s', '<F18>', function()
     require('luasnip').jump(1)
   end),
-  vim.keymap.set('s', '<F18>', function()
+  vim.keymap.set('s', '<F19>', function()
     require('luasnip').jump(-1)
   end),
   vim.keymap.set('s', '<F16>', function()
