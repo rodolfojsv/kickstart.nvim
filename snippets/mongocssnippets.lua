@@ -11,27 +11,47 @@ local snippets = function()
       'MongoUpdate',
       fmt(
         [[UpdateDefinition<{}> update = Builders<{}>.Update
-                                                 .{}({});
+                                                 .{}({}, {});
 
-FilterDefinition<{}> filter = Builders<{}>.Filter.Eq({});
+FilterDefinition<{}> filter = Builders<{}>.Filter.Eq({}, {});
+
+{}.UpdateOne(filter, update);
 ]],
-        { i(1, 'Entity'), rep(1), i(2, 'Action'), i(3, 'name, value'), rep(1), rep(1), i(0, 'name, value') }
+        { i(1, 'Entity'), rep(1), i(2, 'Action'), i(3, 'name'), i(4, 'value'), rep(1), rep(1), i(5, 'name'), i(6, 'value'), i(0, 'collection') }
       )
     ),
     s(
       'MongoUpdateWithFilter',
       fmt(
         [[UpdateDefinition<{}> update = Builders<{}>.Update
-                                                 .{}({});
+                                                 .{}({}, {});
 
-FilterDefinition<{}> filter = Builders<{}>.Filter.Eq({});
+FilterDefinition<{}> filter = Builders<{}>.Filter.Eq({}, {});
 
 BsonDocumentArrayFilterDefinition<{}>[] arrayFilter = new BsonDocumentArrayFilterDefinition<{}>[]
 {{
     new BsonDocumentArrayFilterDefinition<{}>(new BsonDocument("i._id", ObjectId.Parse({}))),
 }};
+
+
+{}.UpdateOne(filter, update, new UpdateOptions {{ ArrayFilters = arrayFilter }});
 ]],
-        { i(1, 'Entity'), rep(1), i(2, 'Action'), i(3, 'name, value'), rep(1), rep(1), i(4, 'name, value'), rep(1), rep(1), rep(1), i(0, 'Identifier') }
+        {
+          i(1, 'Entity'),
+          rep(1),
+          i(2, 'Action'),
+          i(3, 'name'),
+          i(4, 'value'),
+          rep(1),
+          rep(1),
+          i(5, 'name'),
+          i(6, 'value'),
+          rep(1),
+          rep(1),
+          rep(1),
+          i(7, 'Identifier'),
+          i(0, 'collection'),
+        }
       )
     ),
   }
