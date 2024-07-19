@@ -11,9 +11,9 @@ local snippets = function()
       'MongoUpdate',
       fmt(
         [[UpdateDefinition<{}> update = Builders<{}>.Update
-                                                 .{}({}, {});
+                                                 .{}("{}", {});
 
-FilterDefinition<{}> filter = Builders<{}>.Filter.Eq({}, {});
+FilterDefinition<{}> filter = Builders<{}>.Filter.Eq("{}", {});
 
 {}.UpdateOne(filter, update);
 ]],
@@ -24,9 +24,9 @@ FilterDefinition<{}> filter = Builders<{}>.Filter.Eq({}, {});
       'MongoUpdateWithFilter',
       fmt(
         [[UpdateDefinition<{}> update = Builders<{}>.Update
-                                                 .{}({}, {});
+                                                 .{}("{}", {});
 
-FilterDefinition<{}> filter = Builders<{}>.Filter.Eq({}, {});
+FilterDefinition<{}> filter = Builders<{}>.Filter.Eq("{}", {});
 
 BsonDocumentArrayFilterDefinition<{}>[] arrayFilter = new BsonDocumentArrayFilterDefinition<{}>[]
 {{
@@ -60,7 +60,7 @@ BsonDocumentArrayFilterDefinition<{}>[] arrayFilter = new BsonDocumentArrayFilte
         [[UpdateDefinition<{}> update = Builders<{}>.Update
                                                  .PullFilter({}, Builders<{}>.Filter.Where({}));
 
-FilterDefinition<{}> filter = Builders<{}>.Filter.Eq({}, {});
+FilterDefinition<{}> filter = Builders<{}>.Filter.Eq("{}", {});
 
 {}.UpdateOne(filter, update);
 ]],
