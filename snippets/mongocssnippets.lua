@@ -78,6 +78,39 @@ FilterDefinition<{}> filter = Builders<{}>.Filter.Eq("{}", {});
         }
       )
     ),
+    s(
+      'MongoPullWithFilter',
+      fmt(
+        [[UpdateDefinition<{}> update = Builders<{}>.Update
+                                                 .PullFilter({}, Builders<{}>.Filter.Where({}));
+
+FilterDefinition<{}> filter = Builders<{}>.Filter.Eq("{}", {});
+
+BsonDocumentArrayFilterDefinition<{}>[] arrayFilter = new BsonDocumentArrayFilterDefinition<{}>[]
+{{
+    new BsonDocumentArrayFilterDefinition<{}>(new BsonDocument("i._id", ObjectId.Parse({}))),
+}};
+
+{}.UpdateOne(filter, update);
+]],
+        {
+          i(1, 'Entity'),
+          rep(1),
+          i(2, 'ent => ent.Array'),
+          i(3, 'ArrayEnt'),
+          i(4, 'arrEnt => arrEnt.Where/arrEnt.SomeCondition'),
+          rep(1),
+          rep(1),
+          i(5, 'name'),
+          i(6, 'value'),
+          rep(1),
+          rep(1),
+          rep(1),
+          i(7, 'Identifier'),
+          i(0, 'collection'),
+        }
+      )
+    ),
   }
 
   ls.add_snippets('cs', cs_snips)
