@@ -2,6 +2,8 @@ local snippets = function()
   local ls = require 'luasnip'
   local s = ls.snippet
   local i = ls.insert_node
+  local t = ls.text_node
+  local c = ls.choice_node
   local extras = require 'luasnip.extras'
   local rep = extras.rep
   local fmta = require('luasnip.extras.fmt').fmta
@@ -66,6 +68,13 @@ local snippets = function()
           initializeProperties(3),
         }
       )
+    ),
+    s(
+      'ResponseFactory',
+      fmta([[return ResponseFactory.<>(<>);]], {
+        c(1, { t 'BuildResponse', t 'BuildDataResponse' }),
+        i(0, 'ControllerResponse.BadRequest'),
+      })
     ),
   }
 
