@@ -76,6 +76,24 @@ local snippets = function()
         i(0, 'ControllerResponse.BadRequest'),
       })
     ),
+    s(
+      'tryc',
+
+      fmta(
+        [[try {
+
+<>
+
+} catch (Exception ex)
+{
+<>
+<>
+}
+
+]],
+        { i(1), i(2, '_logger.LogError(ex.ToString());'), i(0, 'return something;') }
+      )
+    ),
   }
 
   ls.add_snippets('cs', cs_snips)

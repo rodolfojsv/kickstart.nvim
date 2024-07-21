@@ -16,6 +16,13 @@ return {
   vim.keymap.set('n', '<C-S-a>', '<C-a>'),
   vim.keymap.set('n', '<C-S-x>', '<C-x>'),
   vim.keymap.set('n', '<leader><C-s>', '<cmd>:so ~/.config/nvim/lua/snippets/basiccssnipppets.lua<CR>'),
+  -- vim.keymap.set('n', '<leader><C-s>', function()
+  --   local paths = vim.split(vim.fn.glob('~/.config/nvim/lua/custom/snippets/*lua'), '\n')
+  --
+  --   for _, file in pairs(paths) do
+  --     vim.cmd('source ' .. file)
+  --   end
+  -- end)
   vim.keymap.set('i', '<F18>', function()
     require('luasnip').jump(1)
   end),
