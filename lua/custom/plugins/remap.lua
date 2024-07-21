@@ -15,6 +15,7 @@ return {
   vim.keymap.set('x', '<leader>p', [["_dP]]),
   vim.keymap.set('n', '<C-S-a>', '<C-a>'),
   vim.keymap.set('n', '<C-S-x>', '<C-x>'),
+  vim.keymap.set('n', '<leader><C-s>', '<cmd>:so ~/.config/nvim/lua/snippets/basiccssnipppets.lua<CR>'),
   vim.keymap.set('i', '<F18>', function()
     require('luasnip').jump(1)
   end),

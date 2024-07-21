@@ -8,6 +8,7 @@ return {
   'godlygeek/tabular',
   'tpope/vim-eunuch',
   'tpope/vim-repeat',
+  { 'kevinhwang91/nvim-ufo', requires = 'kevinhwang91/promise-async' },
   'tpope/vim-surround',
   'tpope/vim-unimpaired',
   'tris203/precognition.nvim',
