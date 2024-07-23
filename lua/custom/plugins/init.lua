@@ -13,6 +13,7 @@ return {
   'tpope/vim-unimpaired',
   'tris203/precognition.nvim',
   'justinhj/battery.nvim',
+  'nvim-treesitter/nvim-treesitter-context',
   { 'rodolfojsv/reminders.nvim', branch = 'main' },
   config = function()
     require('battery').setup {
