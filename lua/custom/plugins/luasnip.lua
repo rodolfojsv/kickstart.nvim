@@ -23,6 +23,7 @@ return {
       require('luasnip').filetype_extend('java', { 'javadoc' })
       require('luasnip').filetype_extend('c', { 'cdoc' })
       require('luasnip').filetype_extend('cpp', { 'cppdoc' })
+      -- require('luasnip.loaders.from_lua').load { paths = '~/.config/nvim/lua/custom/plugins/snippets' }
       require 'snippets'
     end,
   },
