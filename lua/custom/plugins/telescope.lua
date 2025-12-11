@@ -11,25 +11,6 @@ return {
     { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
   },
   config = function()
-    -- Telescope is a fuzzy finder that comes with a lot of different things that
-    -- it can fuzzy find! It's more than just a "file finder", it can search
-    -- many different aspects of Neovim, your workspace, LSP, and more!
-    --
-    -- The easiest way to use Telescope, is to start by doing something like:
-    --  :Telescope help_tags
-    --
-    -- After running this command, a window will open up and you're able to
-    -- type in the prompt window. You'll see a list of `help_tags` options and
-    -- a corresponding preview of the help.
-    --
-    -- Two important keymaps to use while in Telescope are:
-    --  - Insert mode: <c-/>
-    --  - Normal mode: ?
-    --
-    -- This opens a window that shows you all of the keymaps for the current
-    -- Telescope picker. This is really useful to discover what Telescope can
-    -- do as well as how to actually do it!
-
     -- Helper function to detect if we're in NeoSMIB directory
     local function is_in_neosmib()
       local cwd = vim.fn.getcwd()
@@ -48,11 +29,18 @@ return {
     end
 
     -- [[ Configure Telescope ]]
-    -- See `:help telescope` and `:help telescope.setup()`
     require('telescope').setup {
       defaults = {
         path_display = custom_path_display,
+        -- Global file ignore patterns
+        file_ignore_patterns = {
+          "%.exe$", "%.dll$", "%.so$", "%.dylib$", "%.a$", "%.o$", "%.obj$",
+          "%.pyc$", "%.class$", "%.pdf$", "%.zip$", "%.tar$", "%.gz$", "%.rar$", "%.7z$",
+          "%.jpg$", "%.jpeg$", "%.png$", "%.gif$", "%.bmp$", "%.ico$",
+          "%.mp3$", "%.mp4$", "%.avi$", "%.mov$", "%.wav$",
+        },
       },
+      pickers = {},
       extensions = {
         ['ui-select'] = {
           require('telescope.themes').get_dropdown(),
@@ -60,11 +48,9 @@ return {
       },
     }
 
-    -- Enable Telescope extensions if they are installed
     pcall(require('telescope').load_extension, 'fzf')
     pcall(require('telescope').load_extension, 'ui-select')
 
-    -- See `:help telescope.builtin`
     local builtin = require 'telescope.builtin'
 
     -- Wrapper functions for MBE2-specific searches
@@ -80,9 +66,51 @@ return {
       opts = opts or {}
       if is_in_neosmib() then
         opts.cwd = 'C:\\Dev\\NeoSMIB\\SMIB\\EGS\\ABS\\source\\Software\\MBE2'
+        
+        -- Create an entry maker that filters based on current prompt
+        local make_entry = require('telescope.make_entry')
+        local original_maker = make_entry.gen_from_file(opts)
+        
+        opts.entry_maker = function(entry)
+          local result = original_maker(entry)
+          if not result then return nil end
+          
+          -- Store original display function
+          local original_display = result.display
+          
+          -- Create custom display that filters based on picker state
+          result.display = function(entry_to_display)
+            -- Get the picker to access the prompt
+            local state = require('telescope.actions.state')
+            local picker = state.get_current_picker(vim.api.nvim_get_current_buf())
+            
+            if picker then
+              local prompt = picker:_get_prompt()
+              local path = entry_to_display.value or entry_to_display.filename or entry_to_display.path or ""
+              
+              -- If prompt doesn't start with test_, filter out UnitTest paths
+              if not prompt:match("^test_") and path:match("UnitTest") then
+                return nil  -- Don't display this entry
+              end
+              
+              -- If prompt starts with test_, only show UnitTest paths
+              if prompt:match("^test_") and not path:match("UnitTest") then
+                return nil  -- Don't display this entry
+              end
+            end
+            
+            if original_display then
+              return original_display(entry_to_display)
+            end
+            return entry_to_display.value
+          end
+          
+          return result
+        end
       end
       builtin.find_files(opts)
     end
+
 
     local function mbe2_grep_string(opts)
       opts = opts or {}
@@ -104,17 +132,13 @@ return {
     vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
     vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
-    -- Slightly advanced example of overriding default behavior and theme
     vim.keymap.set('n', '<leader>/', function()
-      -- You can pass additional configuration to Telescope to change the theme, layout, etc.
       builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
         winblend = 10,
         previewer = false,
       })
     end, { desc = '[/] Fuzzily search in current buffer' })
 
-    -- It's also possible to pass additional configuration options.
-    --  See `:help telescope.builtin.live_grep()` for information about particular keys
     vim.keymap.set('n', '<leader>s/', function()
       mbe2_live_grep {
         grep_open_files = true,
@@ -122,9 +146,10 @@ return {
       }
     end, { desc = '[S]earch [/] in Open Files' })
 
-    -- Shortcut for searching your Neovim configuration files
     vim.keymap.set('n', '<leader>sn', function()
       builtin.find_files { cwd = vim.fn.stdpath 'config' }
     end, { desc = '[S]earch [N]eovim files' })
   end,
 }
+
+
