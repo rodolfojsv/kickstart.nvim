@@ -9,6 +9,10 @@ return {
     },
     { 'nvim-telescope/telescope-ui-select.nvim' },
     { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+    {
+      'nvim-telescope/telescope-frecency.nvim',
+      dependencies = { 'kkharji/sqlite.lua' },
+    },
   },
   config = function()
     -- Helper function to detect if we're in NeoSMIB directory
@@ -45,11 +49,20 @@ return {
         ['ui-select'] = {
           require('telescope.themes').get_dropdown(),
         },
+        frecency = {
+          show_scores = false,
+          show_unindexed = true,
+          ignore_patterns = { "*.git/*", "*/tmp/*", "*/node_modules/*" },
+          workspaces = {
+            ["MBE2"] = "C:\\Dev\\NeoSMIB\\SMIB\\EGS\\ABS\\source\\Software\\MBE2",
+          },
+        },
       },
     }
 
     pcall(require('telescope').load_extension, 'fzf')
     pcall(require('telescope').load_extension, 'ui-select')
+    pcall(require('telescope').load_extension, 'frecency')
 
     local builtin = require 'telescope.builtin'
 
@@ -124,10 +137,98 @@ return {
       builtin.grep_string(opts)
     end
 
+    -- Custom frecency-like sorting using oldfiles
+    local function smart_find_files()
+      if not is_in_neosmib() then
+        mbe2_find_files()
+        return
+      end
+
+      local opts = {
+        cwd = 'C:\\Dev\\NeoSMIB\\SMIB\\EGS\\ABS\\source\\Software\\MBE2',
+        path_display = custom_path_display,
+      }
+      
+      -- Get recently used files from oldfiles
+      local recent_files = vim.v.oldfiles or {}
+      local mbe2_recent = {}
+      for _, file in ipairs(recent_files) do
+        if file:match('MBE2') then
+          table.insert(mbe2_recent, file)
+        end
+      end
+      
+      -- Create an entry maker that marks UnitTest entries and tracks recency
+      local make_entry = require('telescope.make_entry')
+      local original_maker = make_entry.gen_from_file(opts)
+      
+      opts.entry_maker = function(entry)
+        local result = original_maker(entry)
+        if not result then return nil end
+        
+        local path = result.value or result.filename or result.path or ""
+        result.is_unittest = path:match("UnitTest") ~= nil
+        
+        -- Check if this file is in recent files
+        result.recency_score = 0
+        for i, recent in ipairs(mbe2_recent) do
+          if recent:match(vim.pesc(path)) or path:match(vim.pesc(recent)) then
+            result.recency_score = #mbe2_recent - i + 1
+            break
+          end
+        end
+        
+        return result
+      end
+      
+      -- Use custom sorter that filters and prioritizes recent files
+      local conf = require('telescope.config').values
+      local original_sorter = conf.file_sorter(opts)
+      
+      opts.sorter = require('telescope.sorters').Sorter:new {
+        scoring_function = function(self, prompt, line, entry)
+          if not entry or not entry.ordinal then
+            return -1
+          end
+          
+          local is_unittest = entry.is_unittest or false
+          
+          -- Filter based on prompt
+          if prompt and prompt ~= "" and prompt:match("^test_") then
+            -- If prompt starts with test_, only show UnitTest entries
+            if not is_unittest then
+              return -1
+            end
+          else
+            -- Otherwise, hide UnitTest entries
+            if is_unittest then
+              return -1
+            end
+          end
+          
+          -- Get base score from original sorter
+          local score = original_sorter:scoring_function(prompt, line, entry)
+          if score == -1 then
+            return -1
+          end
+          
+          -- Boost score for recently used files
+          if entry.recency_score and entry.recency_score > 0 then
+            score = score - (entry.recency_score * 100)
+          end
+          
+          return score
+        end,
+        highlighter = original_sorter.highlighter,
+      }
+      
+      builtin.find_files(opts)
+    end
+
     -- Standard keymaps
     vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
     vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-    vim.keymap.set('n', '<leader>sf', mbe2_find_files, { desc = '[S]earch [F]iles' })
+    vim.keymap.set('n', '<leader>sf', smart_find_files, { desc = '[S]earch [F]iles (smart)' })
     vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
     vim.keymap.set('n', '<leader>sw', mbe2_grep_string, { desc = '[S]earch current [W]ord' })
     vim.keymap.set('n', '<leader>sg', mbe2_live_grep, { desc = '[S]earch by [G]rep' })
