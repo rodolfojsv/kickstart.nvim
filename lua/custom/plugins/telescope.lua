@@ -67,7 +67,7 @@ return {
       if is_in_neosmib() then
         opts.cwd = 'C:\\Dev\\NeoSMIB\\SMIB\\EGS\\ABS\\source\\Software\\MBE2'
         
-        -- Create an entry maker that filters based on current prompt
+        -- Create an entry maker that marks UnitTest entries
         local make_entry = require('telescope.make_entry')
         local original_maker = make_entry.gen_from_file(opts)
         
@@ -75,38 +75,42 @@ return {
           local result = original_maker(entry)
           if not result then return nil end
           
-          -- Store original display function
-          local original_display = result.display
-          
-          -- Create custom display that filters based on picker state
-          result.display = function(entry_to_display)
-            -- Get the picker to access the prompt
-            local state = require('telescope.actions.state')
-            local picker = state.get_current_picker(vim.api.nvim_get_current_buf())
-            
-            if picker then
-              local prompt = picker:_get_prompt()
-              local path = entry_to_display.value or entry_to_display.filename or entry_to_display.path or ""
-              
-              -- If prompt doesn't start with test_, filter out UnitTest paths
-              if not prompt:match("^test_") and path:match("UnitTest") then
-                return nil  -- Don't display this entry
-              end
-              
-              -- If prompt starts with test_, only show UnitTest paths
-              if prompt:match("^test_") and not path:match("UnitTest") then
-                return nil  -- Don't display this entry
-              end
-            end
-            
-            if original_display then
-              return original_display(entry_to_display)
-            end
-            return entry_to_display.value
-          end
+          local path = result.value or result.filename or result.path or ""
+          result.is_unittest = path:match("UnitTest") ~= nil
           
           return result
         end
+        
+        -- Use custom sorter that filters based on prompt
+        local conf = require('telescope.config').values
+        local original_sorter = conf.file_sorter(opts)
+        
+        opts.sorter = require('telescope.sorters').Sorter:new {
+          scoring_function = function(self, prompt, line, entry)
+            if not entry or not entry.ordinal then
+              return -1
+            end
+            
+            local is_unittest = entry.is_unittest or false
+            
+            -- Filter based on prompt
+            if prompt and prompt ~= "" and prompt:match("^test_") then
+              -- If prompt starts with test_, only show UnitTest entries
+              if not is_unittest then
+                return -1
+              end
+            else
+              -- Otherwise, hide UnitTest entries
+              if is_unittest then
+                return -1
+              end
+            end
+            
+            -- Use original sorter for scoring with correct parameters
+            return original_sorter:scoring_function(prompt, line, entry)
+          end,
+          highlighter = original_sorter.highlighter,
+        }
       end
       builtin.find_files(opts)
     end
