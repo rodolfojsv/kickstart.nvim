@@ -1,11 +1,7 @@
 return {
   'nvimdev/dashboard-nvim',
-  --event = 'VimEnter',
-  cond = function()
-    if next(vim.fn.argv()) == nil then
-      return true
-    end
-  end,
+  lazy = false,
+  priority = 1000,
   dependencies = {
     'nvim-tree/nvim-web-devicons',
     {
@@ -20,8 +16,6 @@ return {
   config = function()
     require('dashboard').setup {
       theme = 'hyper',
-      disable_move = false,
-      shortcut_type = 'number',
       config = {
         week_header = {
           enable = true,
@@ -37,64 +31,9 @@ return {
             group = 'RainbowdelimiterBlue',
             key = 'F',
             action = function()
-              vim.cmd '<cmd>:lua require("oil").open_float(".")<CR>'
+              require('oil').open_float('.')
             end,
           },
-          --     {
-          --       icon = ' ',
-          --       desc = 'Fuzzy find',
-          --       group = 'RainbowDelimiterOrange',
-          --       key = 'fz',
-          --       action = function()
-          --         vim.cmd 'FzfLua files'
-          --       end,
-          --     },
-          --     {
-          --       icon = '󰚰 ',
-          --       desc = 'Check updates',
-          --       group = 'RainbowDelimiterYellow',
-          --       key = 'cu',
-          --       action = function()
-          --         vim.cmd 'Lazy check'
-          --       end,
-          --     },
-          --     {
-          --       icon = '󰓅 ',
-          --       desc = 'Benchmark',
-          --       group = 'RainbowDelimiterYellow',
-          --       key = 'B',
-          --       action = function()
-          --         vim.cmd 'Lazy profile'
-          --       end,
-          --     },
-          --     {
-          --       icon = '󰆼 ',
-          --       desc = 'Database',
-          --       group = 'RainbowDelimiterCyan',
-          --       key = 'db',
-          --       action = function()
-          --         vim.cmd [[
-          -- 	bdelete
-          -- 	DBUI
-          -- ]]
-          --       end,
-          -- },
-          -- {
-          --   icon = '󰘬 ',
-          --   desc = 'Git',
-          --   group = 'RainbowDelimiterRed',
-          --   key = 'gi',
-          --   action = function()
-          --     vim.cmd 'Git'
-          --   end,
-          -- },
-          -- {
-          -- 	icon = "󰈹 ",
-          -- 	desc = "FireFox", group = 'RainbowDelimiterRed', key = 'fr',
-          -- 	action = function()
-          -- 		vim.cmd("!firefox")
-          -- 	end
-          -- },
         },
         project = { enable = false },
         mru = {
@@ -105,11 +44,6 @@ return {
         footer = function()
           return require('fortune').get_fortune()
         end,
-      },
-      hide = {
-        statusline = true, -- hide statusline default is true
-        tabline = true, -- hide the tabline
-        winbar = true, -- hide winbar
       },
     }
   end,
