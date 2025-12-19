@@ -166,6 +166,15 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- [[ Indentation Settings ]]
+-- Set default indentation to match Visual Studio (4 spaces)
+vim.o.tabstop = 4         -- Number of spaces that a <Tab> in the file counts for
+vim.o.shiftwidth = 4      -- Number of spaces to use for each step of (auto)indent
+vim.o.softtabstop = 4     -- Number of spaces that a <Tab> counts for while editing
+vim.o.expandtab = true    -- Use spaces instead of tabs
+vim.o.smartindent = true  -- Smart autoindenting when starting a new line
+vim.o.autoindent = true   -- Copy indent from current line when starting a new line
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -671,22 +680,12 @@ require('lazy').setup({
     },
     opts = {
       notify_on_error = false,
-      format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
-        if disable_filetypes[vim.bo[bufnr].filetype] then
-          return nil
-        else
-          return {
-            timeout_ms = 500,
-            lsp_format = 'fallback',
-          }
-        end
-      end,
+      -- format_on_save disabled - use <leader>f to format manually
       formatters_by_ft = {
         lua = { 'stylua' },
+        cs = { 'lsp_format' },
+        c = { 'lsp_format' },
+        cpp = { 'lsp_format' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
