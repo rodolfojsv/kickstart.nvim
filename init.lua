@@ -175,6 +175,9 @@ vim.o.expandtab = true    -- Use spaces instead of tabs
 vim.o.smartindent = true  -- Smart autoindenting when starting a new line
 vim.o.autoindent = true   -- Copy indent from current line when starting a new line
 
+-- Disable automatic file modifications on save
+vim.o.fixendofline = false  -- Don't add/remove final newline automatically
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -568,6 +571,10 @@ require('lazy').setup({
       --  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
       --  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
       local capabilities = require('blink.cmp').get_lsp_capabilities()
+      
+      -- Disable LSP formatting (we'll use conform.nvim manually with <leader>f)
+      capabilities.textDocument.formatting = false
+      capabilities.textDocument.rangeFormatting = false
 
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -666,7 +673,7 @@ require('lazy').setup({
 
   { -- Autoformat
     'stevearc/conform.nvim',
-    event = { 'BufWritePre' },
+    lazy = true,
     cmd = { 'ConformInfo' },
     keys = {
       {
@@ -680,7 +687,7 @@ require('lazy').setup({
     },
     opts = {
       notify_on_error = false,
-      -- format_on_save disabled - use <leader>f to format manually
+      format_on_save = nil, -- Explicitly disable format on save
       formatters_by_ft = {
         lua = { 'stylua' },
         cs = { 'lsp_format' },
