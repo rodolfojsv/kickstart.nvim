@@ -1,5 +1,6 @@
 return {
   vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Center after C-U' }),
+  vim.keymap.set('n', '<leader>rn', function() vim.lsp.buf.rename() end, { desc = '[R]e[n]ame with LSP' }),
   vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Center after C-D' }),
   vim.keymap.set('i', '<C-c>', '<Esc>'),
   vim.keymap.set('n', '<leader>nt', ':vsplit<Enter>', { desc = 'Vertical Split' }),

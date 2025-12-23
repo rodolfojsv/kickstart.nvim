@@ -18,13 +18,13 @@ return {
     -- Helper function to detect if we're in NeoSMIB directory
     local function is_in_neosmib()
       local cwd = vim.fn.getcwd()
-      return cwd:match('C:\\Dev\\NeoSMIB') ~= nil or cwd:match('C:/Dev/NeoSMIB') ~= nil
+      return cwd:match 'C:\\Dev\\NeoSMIB' ~= nil or cwd:match 'C:/Dev/NeoSMIB' ~= nil
     end
 
     -- Path display function to trim paths after MBE2
     local function custom_path_display(opts, path)
       if is_in_neosmib() then
-        local mbe2_index = path:find('MBE2')
+        local mbe2_index = path:find 'MBE2'
         if mbe2_index then
           return path:sub(mbe2_index + 5)
         end
@@ -38,10 +38,32 @@ return {
         path_display = custom_path_display,
         -- Global file ignore patterns
         file_ignore_patterns = {
-          "%.exe$", "%.dll$", "%.so$", "%.dylib$", "%.a$", "%.o$", "%.obj$",
-          "%.pyc$", "%.class$", "%.pdf$", "%.zip$", "%.tar$", "%.gz$", "%.rar$", "%.7z$",
-          "%.jpg$", "%.jpeg$", "%.png$", "%.gif$", "%.bmp$", "%.ico$",
-          "%.mp3$", "%.mp4$", "%.avi$", "%.mov$", "%.wav$",
+          '%.exe$',
+          '%.dll$',
+          '%.so$',
+          '%.dylib$',
+          '%.a$',
+          '%.o$',
+          '%.obj$',
+          '%.pyc$',
+          '%.class$',
+          '%.pdf$',
+          '%.zip$',
+          '%.tar$',
+          '%.gz$',
+          '%.rar$',
+          '%.7z$',
+          '%.jpg$',
+          '%.jpeg$',
+          '%.png$',
+          '%.gif$',
+          '%.bmp$',
+          '%.ico$',
+          '%.mp3$',
+          '%.mp4$',
+          '%.avi$',
+          '%.mov$',
+          '%.wav$',
         },
       },
       pickers = {},
@@ -52,9 +74,9 @@ return {
         frecency = {
           show_scores = false,
           show_unindexed = true,
-          ignore_patterns = { "*.git/*", "*/tmp/*", "*/node_modules/*" },
+          ignore_patterns = { '*.git/*', '*/tmp/*', '*/node_modules/*' },
           workspaces = {
-            ["MBE2"] = "C:\\Dev\\NeoSMIB\\SMIB\\EGS\\ABS\\source\\Software\\MBE2",
+            ['MBE2'] = 'C:\\Dev\\NeoSMIB\\SMIB\\EGS\\ABS\\source\\Software\\MBE2',
           },
         },
       },
@@ -79,35 +101,37 @@ return {
       opts = opts or {}
       if is_in_neosmib() then
         opts.cwd = 'C:\\Dev\\NeoSMIB\\SMIB\\EGS\\ABS\\source\\Software\\MBE2'
-        
+
         -- Create an entry maker that marks UnitTest entries
-        local make_entry = require('telescope.make_entry')
+        local make_entry = require 'telescope.make_entry'
         local original_maker = make_entry.gen_from_file(opts)
-        
+
         opts.entry_maker = function(entry)
           local result = original_maker(entry)
-          if not result then return nil end
-          
-          local path = result.value or result.filename or result.path or ""
-          result.is_unittest = path:match("UnitTest") ~= nil
-          
+          if not result then
+            return nil
+          end
+
+          local path = result.value or result.filename or result.path or ''
+          result.is_unittest = path:match 'UnitTest' ~= nil
+
           return result
         end
-        
+
         -- Use custom sorter that filters based on prompt
         local conf = require('telescope.config').values
         local original_sorter = conf.file_sorter(opts)
-        
+
         opts.sorter = require('telescope.sorters').Sorter:new {
           scoring_function = function(self, prompt, line, entry)
             if not entry or not entry.ordinal then
               return -1
             end
-            
+
             local is_unittest = entry.is_unittest or false
-            
+
             -- Filter based on prompt
-            if prompt and prompt ~= "" and prompt:match("^test_") then
+            if prompt and prompt ~= '' and prompt:match '^test_' then
               -- If prompt starts with test_, only show UnitTest entries
               if not is_unittest then
                 return -1
@@ -118,7 +142,7 @@ return {
                 return -1
               end
             end
-            
+
             -- Use original sorter for scoring with correct parameters
             return original_sorter:scoring_function(prompt, line, entry)
           end,
@@ -127,7 +151,6 @@ return {
       end
       builtin.find_files(opts)
     end
-
 
     local function mbe2_grep_string(opts)
       opts = opts or {}
@@ -148,27 +171,29 @@ return {
         cwd = 'C:\\Dev\\NeoSMIB\\SMIB\\EGS\\ABS\\source\\Software\\MBE2',
         path_display = custom_path_display,
       }
-      
+
       -- Get recently used files from oldfiles
       local recent_files = vim.v.oldfiles or {}
       local mbe2_recent = {}
       for _, file in ipairs(recent_files) do
-        if file:match('MBE2') then
+        if file:match 'MBE2' then
           table.insert(mbe2_recent, file)
         end
       end
-      
+
       -- Create an entry maker that marks UnitTest entries and tracks recency
-      local make_entry = require('telescope.make_entry')
+      local make_entry = require 'telescope.make_entry'
       local original_maker = make_entry.gen_from_file(opts)
-      
+
       opts.entry_maker = function(entry)
         local result = original_maker(entry)
-        if not result then return nil end
-        
-        local path = result.value or result.filename or result.path or ""
-        result.is_unittest = path:match("UnitTest") ~= nil
-        
+        if not result then
+          return nil
+        end
+
+        local path = result.value or result.filename or result.path or ''
+        result.is_unittest = path:match 'UnitTest' ~= nil
+
         -- Check if this file is in recent files
         result.recency_score = 0
         for i, recent in ipairs(mbe2_recent) do
@@ -177,24 +202,24 @@ return {
             break
           end
         end
-        
+
         return result
       end
-      
+
       -- Use custom sorter that filters and prioritizes recent files
       local conf = require('telescope.config').values
       local original_sorter = conf.file_sorter(opts)
-      
+
       opts.sorter = require('telescope.sorters').Sorter:new {
         scoring_function = function(self, prompt, line, entry)
           if not entry or not entry.ordinal then
             return -1
           end
-          
+
           local is_unittest = entry.is_unittest or false
-          
+
           -- Filter based on prompt
-          if prompt and prompt ~= "" and prompt:match("^test_") then
+          if prompt and prompt ~= '' and prompt:match '^test_' then
             -- If prompt starts with test_, only show UnitTest entries
             if not is_unittest then
               return -1
@@ -205,23 +230,23 @@ return {
               return -1
             end
           end
-          
+
           -- Get base score from original sorter
           local score = original_sorter:scoring_function(prompt, line, entry)
           if score == -1 then
             return -1
           end
-          
+
           -- Boost score for recently used files
           if entry.recency_score and entry.recency_score > 0 then
             score = score - (entry.recency_score * 100)
           end
-          
+
           return score
         end,
         highlighter = original_sorter.highlighter,
       }
-      
+
       builtin.find_files(opts)
     end
 
@@ -254,7 +279,14 @@ return {
     vim.keymap.set('n', '<leader>sn', function()
       builtin.find_files { cwd = vim.fn.stdpath 'config' }
     end, { desc = '[S]earch [N]eovim files' })
+
+    vim.keymap.set('n', '<leader>sC', function()
+      local clipboard = vim.fn.getreg '+' -- Get clipboard content
+      if clipboard == '' then
+        vim.notify('Clipboard is empty', vim.log.levels.WARN)
+      else
+        mbe2_grep_string { search = clipboard }
+      end
+    end, { desc = '[S]earch using [C]lipboard content' })
   end,
 }
-
-
