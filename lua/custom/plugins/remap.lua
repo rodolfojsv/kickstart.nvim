@@ -1,16 +1,17 @@
 return {
   vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Center after C-U' }),
-  vim.keymap.set('n', '<leader>rn', function()   vim.lsp.buf.rename()
-end, { desc = '[R]e[n]ame with LSP' }),
+  vim.keymap.set('n', '<leader>rn', function()
+    vim.lsp.buf.rename()
+  end, { desc = '[R]e[n]ame with LSP' }),
   vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Center after C-D' }),
   vim.keymap.set('i', '<C-c>', '<Esc>'),
   vim.keymap.set('n', '<leader>nt', ':vsplit<Enter>', { desc = 'Vertical Split' }),
   vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Center after next (N)' }),
   vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Center after next (n)' }),
-  vim.keymap.set('n', '<S-A-k>', ':m .-2<CR>=='), -- move line down(n)
-  vim.keymap.set('v', '<S-A-j>', ":m '>+1<CR>gv=gv"), -- move line up(v)
-  vim.keymap.set('n', '<S-A-j>', ':m .+1<CR>=='), -- move line up(n)
-  vim.keymap.set('v', '<S-A-k>', ":m '<-1<CR>gv=gv"), -- move line down(v)
+  vim.keymap.set('n', 'Ѡ', ':m .-2<CR>=='), -- move line down(n)
+  vim.keymap.set('v', '♠', ":m '>+1<CR>gv=gv"), -- move line up(v)
+  vim.keymap.set('v', 'Ѡ', ":m '<-2<CR>gv=gv"), -- move line down(v)
+  vim.keymap.set('n', '♠', ':m .+1<CR>=='), -- move line up(n)
   vim.keymap.set('n', '<leader><C-n>', '<cmd>cnext<CR>zz', { desc = 'Next item on quickfix list' }),
   vim.keymap.set('n', '<leader><C-p>', '<cmd>cprev<CR>zz', { desc = 'Previous item on quickfix list' }),
   vim.keymap.set('n', '<leader>prt', ":lua require('precognition').toggle()<CR>", { desc = '[Pr]ecognition [t]oggle' }),
@@ -19,62 +20,62 @@ end, { desc = '[R]e[n]ame with LSP' }),
   vim.keymap.set('n', '<A-S-x>', '<C-x>'),
   vim.keymap.set('n', '<leader><C-s>', '<cmd>:so ~/.config/nvim/lua/snippets/basiccssnipppets.lua<CR>'),
   vim.keymap.set('n', '<leader>cg', function()
-  vim.fn.jobstart('powershell -ExecutionPolicy Bypass -File C:\\Dev\\NeoSMIB\\setup.ps1', {
-    on_exit = function(_, code)
-      if code == 0 then
-        vim.notify('✓ CMake setup completed!', vim.log.levels.INFO)
-        -- Optional: refresh compile_commands.json in LSP
-        vim.cmd 'LspRestart'
-      else
-        vim.notify('✗ CMake setup failed', vim.log.levels.ERROR)
-      end
-    end,
-  })
-  vim.notify('Running CMake setup...', vim.log.levels.INFO)
+    vim.fn.jobstart('powershell -ExecutionPolicy Bypass -File C:\\Dev\\NeoSMIB\\setup.ps1', {
+      on_exit = function(_, code)
+        if code == 0 then
+          vim.notify('✓ CMake setup completed!', vim.log.levels.INFO)
+          -- Optional: refresh compile_commands.json in LSP
+          vim.cmd 'LspRestart'
+        else
+          vim.notify('✗ CMake setup failed', vim.log.levels.ERROR)
+        end
+      end,
+    })
+    vim.notify('Running CMake setup...', vim.log.levels.INFO)
   end, { noremap = true, desc = '[C]make [G]enerate' }),
   vim.keymap.set('i', '<F18>', function()
-  require('luasnip').jump(1)
+    require('luasnip').jump(1)
   end),
   vim.keymap.set('i', '<F19>', function()
-  require('luasnip').jump(-1)
+    require('luasnip').jump(-1)
   end),
   vim.keymap.set('i', '<F16>', function()
-  if require('luasnip').choice_active() then
-    require('luasnip').change_choice(1)
-  end
+    if require('luasnip').choice_active() then
+      require('luasnip').change_choice(1)
+    end
   end),
   vim.keymap.set('i', '<F17>', function()
-  if require('luasnip').choice_active() then
-    require('luasnip').change_choice(-1)
-  end
+    if require('luasnip').choice_active() then
+      require('luasnip').change_choice(-1)
+    end
   end),
   vim.keymap.set('s', '<F18>', function()
-  require('luasnip').jump(1)
+    require('luasnip').jump(1)
   end),
   vim.keymap.set('s', '<F19>', function()
-  require('luasnip').jump(-1)
+    require('luasnip').jump(-1)
   end),
   vim.keymap.set('s', '<F16>', function()
-  if require('luasnip').choice_active() then
-    require('luasnip').change_choice(1)
-  end
+    if require('luasnip').choice_active() then
+      require('luasnip').change_choice(1)
+    end
   end),
   vim.keymap.set('s', '<F17>', function()
-  if require('luasnip').choice_active() then
-    require('luasnip').change_choice(-1)
-  end
+    if require('luasnip').choice_active() then
+      require('luasnip').change_choice(-1)
+    end
   end),
-  vim.keymap.set('n', '<leader>e', function() 
-  local filepath = vim.api.nvim_buf_get_name(0)
-  if filepath == '' then
-    vim.notify('No file in current buffer', vim.log.levels.WARN)
-    return
-  end
+  vim.keymap.set('n', '<leader>e', function()
+    local filepath = vim.api.nvim_buf_get_name(0)
+    if filepath == '' then
+      vim.notify('No file in current buffer', vim.log.levels.WARN)
+      return
+    end
 
-  local dir = vim.fn.fnamemodify(filepath, ':p:h')
+    local dir = vim.fn.fnamemodify(filepath, ':p:h')
 
-  -- Use PowerShell to open Explorer at the directory
-  local cmd = string.format('explorer.exe "%s"', dir)
-  vim.fn.system(cmd)
-  end , { desc = "Open windows [e]xplorer" })
+    -- Use PowerShell to open Explorer at the directory
+    local cmd = string.format('explorer.exe "%s"', dir)
+    vim.fn.system(cmd)
+  end, { desc = 'Open windows [e]xplorer' }),
 }

@@ -3,7 +3,7 @@ return {
   {
     'zbirenbaum/copilot.lua',
     cmd = 'Copilot',
-    event = 'InsertEnter',
+    lazy = true,
     config = function()
       require('copilot').setup {
         suggestion = {
@@ -28,8 +28,7 @@ return {
   -- Avante.nvim - Cursor-like AI interface
   {
     'yetone/avante.nvim',
-    event = 'VeryLazy',
-    lazy = false,
+    lazy = true,
     version = false,
     opts = {
       -- Provider configuration
