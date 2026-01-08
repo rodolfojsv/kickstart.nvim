@@ -1,5 +1,6 @@
 return {
   'stevearc/oil.nvim',
+  lazy = false,
   keys = {
     { '-', '<CMD>Oil<CR>', desc = 'Open parent directory' },
   },
@@ -20,5 +21,23 @@ return {
       },
     }
     vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
+    
+    -- Open oil on startup only when a directory argument is provided
+    vim.api.nvim_create_autocmd('VimEnter', {
+      callback = function()
+        -- Only proceed if arguments were provided (not plain 'nvim')
+        if vim.fn.argc() == 0 then
+          return  -- Let dashboard show
+        end
+        
+        local buf_name = vim.api.nvim_buf_get_name(0)
+        local buf_ft = vim.bo.filetype
+        
+        -- Open oil if buffer is empty/directory and not a special filetype
+        if buf_name == '' and buf_ft ~= 'dashboard' then
+          require('oil').open()
+        end
+      end,
+    })
   end,
 }
