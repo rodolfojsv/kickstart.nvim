@@ -56,22 +56,7 @@ return {
                   
                   local session_root = vim.fn.stdpath('data') .. '/sessions/'
                   local session_file = session_root .. escaped .. '.vim'
-                  
-                  -- Log to file
-                  local log_file = io.open('C:\\Users\\lph15526\\sessionizer-debug.log', 'a')
-                  if log_file then
-                    log_file:write('=== Sessionizer Debug ===\n')
-                    log_file:write('Selected dir: ' .. dir .. '\n')
-                    log_file:write('Current dir: ' .. cwd .. '\n')
-                    log_file:write('Clean cwd: ' .. clean_cwd .. '\n')
-                    log_file:write('Escaped dir: ' .. escaped .. '\n')
-                    log_file:write('Session root: ' .. session_root .. '\n')
-                    log_file:write('Session file: ' .. session_file .. '\n')
-                    log_file:write('Filereadable: ' .. vim.fn.filereadable(session_file) .. '\n')
-                    log_file:write('\n')
-                    log_file:close()
-                  end
-                  
+                    
                   -- Check if session file exists
                   if vim.fn.filereadable(session_file) == 1 then
                     -- Session exists, restore it

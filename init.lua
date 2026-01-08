@@ -693,6 +693,8 @@ require('lazy').setup({
         cs = { 'lsp_format' },
         c = { 'lsp_format' },
         cpp = { 'lsp_format' },
+        json = { 'prettier' },
+        jsonc = { 'prettier' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
