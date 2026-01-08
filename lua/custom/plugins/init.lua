@@ -28,4 +28,7 @@ return {
       require('nvim-autopairs').setup()
     end,
   },
+
+  -- Number Manager - local plugin
+  require('custom.plugins.harpoonlist'),
 }
