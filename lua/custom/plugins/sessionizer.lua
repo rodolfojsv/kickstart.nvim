@@ -37,7 +37,7 @@ return {
               if selection then
                 local dir = selection[1]
                 
-                -- Save current session before switching
+                -- Save current session before switching (before closing buffers!)
                 vim.cmd('silent! AutoSession save')
                 
                 -- Close all buffers

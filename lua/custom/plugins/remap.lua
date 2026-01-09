@@ -67,12 +67,34 @@ return {
   end),
   vim.keymap.set('n', '<leader>e', function()
     local filepath = vim.api.nvim_buf_get_name(0)
-    if filepath == '' then
-      vim.notify('No file in current buffer', vim.log.levels.WARN)
-      return
+    local dir
+    
+    -- Check if we're in an oil buffer
+    if vim.bo.filetype == 'oil' then
+      -- Get the current directory from oil
+      dir = require('oil').get_current_dir()
+      if not dir then
+        vim.notify('Could not get directory from oil', vim.log.levels.WARN)
+        return
+      end
+    else
+      -- Regular file buffer
+      if filepath == '' then
+        vim.notify('No file in current buffer', vim.log.levels.WARN)
+        return
+      end
+      
+      -- Check if cursor is on a directory entry in oil
+      local entry = require('oil').get_cursor_entry()
+      if entry and entry.type == 'directory' then
+        -- Get the full path to the directory under cursor
+        local current_dir = require('oil').get_current_dir()
+        dir = current_dir .. entry.name
+      else
+        -- Regular file, get its directory
+        dir = vim.fn.fnamemodify(filepath, ':p:h')
+      end
     end
-
-    local dir = vim.fn.fnamemodify(filepath, ':p:h')
 
     -- Use PowerShell to open Explorer at the directory
     local cmd = string.format('explorer.exe "%s"', dir)

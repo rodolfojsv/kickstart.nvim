@@ -9,8 +9,12 @@ return {
       
       -- Disable auto-restore since we're doing it manually in sessionizer
       auto_session_enabled = false,
-      auto_save_enabled = true,
+      auto_save_enabled = false,
       auto_restore_enabled = false,
+      
+      -- Suppress session notifications
+      suppress_dirs = { '~/', '~/Downloads', '/' },
+      silent = true,
       
       -- Use directory name as session name
       auto_session_root_dir = vim.fn.stdpath('data') .. '/sessions/',
