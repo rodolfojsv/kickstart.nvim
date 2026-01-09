@@ -30,5 +30,6 @@ return {
   },
 
   -- Number Manager - local plugin
-  require('custom.plugins.harpoonlist'),
+  -- Needs more work...
+  -- require('custom.plugins.harpoonlist'),
 }
