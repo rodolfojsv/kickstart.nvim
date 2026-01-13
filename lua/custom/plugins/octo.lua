@@ -1,0 +1,44 @@
+return {}
+-- return {
+--   "pwntester/octo.nvim",
+--   cmd = "Octo",
+--   opts = {
+--     -- or "fzf-lua" or "snacks" or "default"
+--     picker = "telescope",
+--     -- bare Octo command opens picker of commands
+--     enable_builtin = true,
+--   },
+--   keys = {
+--     {
+--       "<leader>op",
+--       function()
+--         -- Check if we need to cd into SMIB subdirectory
+--         local cwd = vim.fn.getcwd()
+--         if cwd:match('NeoSMIB$') and vim.fn.isdirectory(cwd .. '\\SMIB\\.git') == 1 then
+--           vim.cmd('cd ' .. vim.fn.fnameescape(cwd .. '\\SMIB'))
+--         end
+--         vim.cmd('Octo pr list')
+--       end,
+--       desc = "List GitHub PullRequests",
+--     },
+--     {
+--       "<leader>on",
+--       function()
+--         -- Check if we need to cd into SMIB subdirectory
+--         local cwd = vim.fn.getcwd()
+--         if cwd:match('NeoSMIB$') and vim.fn.isdirectory(cwd .. '\\SMIB\\.git') == 1 then
+--           vim.cmd('cd ' .. vim.fn.fnameescape(cwd .. '\\SMIB'))
+--         end
+--         vim.cmd('Octo notification list')
+--       end,
+--       desc = "List GitHub Notifications",
+--     },
+--   },
+--   dependencies = {
+--     "nvim-lua/plenary.nvim",
+--     "nvim-telescope/telescope.nvim",
+--     -- OR "ibhagwan/fzf-lua",
+--     -- OR "folke/snacks.nvim",
+--     "nvim-tree/nvim-web-devicons",
+--   },
+-- }
