@@ -15,7 +15,7 @@ return {
       -- Suppress session notifications
       suppress_dirs = { '~/', '~/Downloads', '/' },
       silent = true,
-      
+      silent_restore = true,
       -- Use directory name as session name
       auto_session_root_dir = vim.fn.stdpath('data') .. '/sessions/',
       
