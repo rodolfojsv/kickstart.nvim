@@ -12,8 +12,8 @@ return {
   vim.keymap.set('v', '♠', ":m '>+1<CR>gv=gv"), -- move line up(v)
   vim.keymap.set('v', 'Ѡ', ":m '<-2<CR>gv=gv"), -- move line down(v)
   vim.keymap.set('n', '♠', ':m .+1<CR>=='), -- move line up(n)
-  vim.keymap.set('n', '<leader><C-n>', '<cmd>cnext<CR>zz', { desc = 'Next item on quickfix list' }),
-  vim.keymap.set('n', '<leader><C-p>', '<cmd>cprev<CR>zz', { desc = 'Previous item on quickfix list' }),
+  vim.keymap.set('n', 'Ѱ', '<cmd>cnext<CR>zz', { desc = 'Next item on quickfix list' }),
+  vim.keymap.set('n', 'Ҁ', '<cmd>cprev<CR>zz', { desc = 'Previous item on quickfix list' }),
   vim.keymap.set('n', '<leader>prt', ":lua require('precognition').toggle()<CR>", { desc = '[Pr]ecognition [t]oggle' }),
   vim.keymap.set('x', '<leader>p', [["_dP]]),
   vim.keymap.set('n', '<A-S-a>', '<C-a>'),
