@@ -5,8 +5,13 @@ return {
   config = function()
     local harpoon = require 'harpoon'
 
-    -- Setup harpoon with global root directory
-    harpoon:setup()
+    -- Setup harpoon with settings that enable persistence
+    harpoon:setup({
+      settings = {
+        save_on_toggle = true,
+        sync_on_ui_close = true,
+      }
+    })
     
     -- Helper function to safely get a harpoon list
     local function get_list()

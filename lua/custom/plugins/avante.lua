@@ -1,9 +1,9 @@
 return {
-  -- Base copilot plugin (no Node.js required)
+  -- Base copilot plugin (no Node.js required) - MUST load first
   {
     'zbirenbaum/copilot.lua',
-    cmd = 'Copilot',
-    lazy = true,
+    lazy = false, -- Load immediately on startup
+    priority = 1000,
     config = function()
       require('copilot').setup {
         suggestion = {
@@ -30,6 +30,10 @@ return {
     'yetone/avante.nvim',
     lazy = true,
     version = false,
+    init = function()
+      -- Define signs before plugin loads
+      vim.fn.sign_define('AvanteInputPromptSign', { text = '▶', texthl = 'Special' })
+    end,
     opts = {
       -- Provider configuration
       provider = 'copilot', -- Use GitHub Copilot by default
@@ -62,10 +66,17 @@ return {
       
       behaviour = {
         auto_suggestions = true,
-        auto_set_highlight_group = true,
+        auto_set_highlight_group = false, -- Disable auto highlight to avoid errors
         auto_set_keymaps = false, -- We're setting custom keymaps
         auto_apply_diff_after_generation = false,
         support_paste_from_clipboard = false,
+      },
+      
+      highlights = {
+        diff = {
+          current = 'DiffText',
+          incoming = 'DiffAdd',
+        },
       },
       
       mappings = {
