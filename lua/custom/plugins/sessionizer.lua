@@ -1,6 +1,39 @@
 -- Sessionizer Plugin
 -- Fuzzy find and switch to directories under specified paths
 
+-- Helper function to jump directly to a specific directory
+local function jump_to_dir(dir)
+  -- Save current session before switching (before closing buffers!)
+  vim.cmd 'silent! AutoSession save'
+
+  -- Close all buffers
+  vim.cmd 'silent! %bdelete'
+
+  -- Change directory
+  vim.cmd('cd ' .. vim.fn.fnameescape(dir))
+
+  -- Small delay to ensure directory change is complete
+  vim.defer_fn(function()
+    -- Get current directory and manually escape it using URL encoding
+    local cwd = vim.fn.getcwd()
+    local clean_cwd = cwd:gsub('\\+$', '') -- Remove trailing backslash
+    -- Encode special characters: backslash, colon, dot, and space
+    local escaped = clean_cwd:gsub('\\', '%%5C'):gsub(':', '%%3A'):gsub('%.', '%%2E'):gsub(' ', '%%20')
+
+    local session_root = vim.fn.stdpath 'data' .. '/sessions/'
+    local session_file = session_root .. escaped .. '.vim'
+
+    -- Check if session file exists
+    if vim.fn.filereadable(session_file) == 1 then
+      -- Session exists, restore it
+      vim.cmd 'silent! AutoSession restore'
+    else
+      -- No session exists, open oil
+      require('oil').open(dir)
+    end
+  end, 100)
+end
+
 return {
   'nvim-telescope/telescope.nvim',
   keys = {
@@ -84,37 +117,7 @@ return {
         actions.close(prompt_bufnr)
 
         if selection then
-          local dir = selection.path
-
-          -- Save current session before switching (before closing buffers!)
-          vim.cmd 'silent! AutoSession save'
-
-          -- Close all buffers
-          vim.cmd 'silent! %bdelete'
-
-          -- Change directory
-          vim.cmd('cd ' .. vim.fn.fnameescape(dir))
-
-          -- Small delay to ensure directory change is complete
-          vim.defer_fn(function()
-            -- Get current directory and manually escape it using URL encoding
-            local cwd = vim.fn.getcwd()
-            local clean_cwd = cwd:gsub('\\+$', '') -- Remove trailing backslash
-            -- Encode special characters: backslash, colon, dot, and space
-            local escaped = clean_cwd:gsub('\\', '%%5C'):gsub(':', '%%3A'):gsub('%.', '%%2E'):gsub(' ', '%%20')
-
-            local session_root = vim.fn.stdpath 'data' .. '/sessions/'
-            local session_file = session_root .. escaped .. '.vim'
-
-            -- Check if session file exists
-            if vim.fn.filereadable(session_file) == 1 then
-              -- Session exists, restore it
-              vim.cmd 'silent! AutoSession restore'
-            else
-              -- No session exists, open oil
-              require('oil').open(dir)
-            end
-          end, 100)
+          jump_to_dir(selection.path)
         end
       end)
 
@@ -123,6 +126,21 @@ return {
   }):find()
       end,
       desc = 'Sessionizer - Find and switch to directory',
+    },
+    -- Quick access keymaps for specific directories
+    {
+      '<leader><C-n>',
+      function()
+        jump_to_dir('C:\\Dev\\notes')
+      end,
+      desc = 'Jump to notes folder',
+    },
+        {
+      '<leader><C-s>',
+      function()
+        jump_to_dir('C:\\Dev\\NeoSMIB')
+      end,
+      desc = 'Jump to NeoSMIB folder',
     },
   },
 }
