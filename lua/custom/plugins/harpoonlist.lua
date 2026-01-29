@@ -21,13 +21,23 @@ local function read_numbers()
   local content = file:read('*all')
   file:close()
 
-  -- Parse lines, looking for number entries
+  -- Parse lines, looking for number entries with optional aliases
+  -- Format: [*]<number>[:<alias>]
   for line in content:gmatch('[^\r\n]+') do
     local is_selected = line:match('^%*')
-    local num = tonumber(line:match('%d+'))
+    local num_part = is_selected and line:sub(2) or line
+    local num, alias = num_part:match('(%d+):?(.*)')
+    num = tonumber(num)
+    
     if num then
+      -- If no alias, default to harpoonlist_<number>
+      if not alias or alias == '' then
+        alias = 'harpoonlist_' .. num
+      end
+      
       table.insert(numbers, {
         number = num,
+        alias = alias,
         selected = is_selected ~= nil,
       })
       if is_selected then
@@ -52,7 +62,7 @@ local function write_numbers(numbers)
 
   for i, item in ipairs(numbers) do
     local prefix = item.selected and '*' or ''
-    file:write(prefix .. item.number .. '\n')
+    file:write(prefix .. item.number .. ':' .. item.alias .. '\n')
     if i < #numbers then
       file:write('\n') -- Empty line between entries
     end
@@ -75,9 +85,10 @@ local function add_number()
     item.selected = false
   end
 
-  -- Add new number as selected
+  -- Add new number as selected with default alias
   table.insert(numbers, {
     number = new_number,
+    alias = 'harpoonlist_' .. new_number,
     selected = true,
   })
 
@@ -134,6 +145,26 @@ local function remove_number(num)
   write_numbers(new_numbers)
 end
 
+-- Rename/alias a list
+local function rename_list(num, new_alias)
+  local numbers = read_numbers()
+  local found = false
+
+  for _, item in ipairs(numbers) do
+    if item.number == num then
+      item.alias = new_alias
+      found = true
+      break
+    end
+  end
+
+  if found then
+    write_numbers(numbers)
+    return true
+  end
+  return false
+end
+
 -- Show the number selector
 local function show_selector()
   local numbers = read_numbers()
@@ -151,7 +182,8 @@ local function show_selector()
   
   for i, item in ipairs(numbers) do
     local prefix = item.selected and '* ' or '  '
-    local line = prefix .. item.number .. (item.selected and ' (selected)' or '')
+    local display = item.alias .. ' (#' .. item.number .. ')'
+    local line = prefix .. display .. (item.selected and ' (selected)' or '')
     table.insert(lines, line)
     number_map[i] = item.number
   end
@@ -231,6 +263,22 @@ local function show_selector()
       vim.defer_fn(show_selector, 50)
     end
   end, { buffer = buf, nowait = true })
+
+  -- Rename on r
+  vim.keymap.set('n', 'r', function()
+    local line = vim.api.nvim_win_get_cursor(win)[1]
+    local num_to_rename = number_map[line]
+    if num_to_rename then
+      close_window()
+      vim.ui.input({ prompt = 'New alias: ' }, function(input)
+        if input and input ~= '' then
+          rename_list(num_to_rename, input)
+          -- Reopen to show updated list
+          vim.defer_fn(show_selector, 50)
+        end
+      end)
+    end
+  end, { buffer = buf, nowait = true })
 end
 
 -- Load selected number on startup
@@ -269,6 +317,26 @@ M.setup = function(opts)
 
   vim.api.nvim_create_user_command('ListSelect', show_selector, {
     desc = 'Show list selector',
+  })
+
+  vim.api.nvim_create_user_command('ListRename', function(opts)
+    local num = tonumber(opts.args)
+    if not num then
+      print('Usage: ListRename <number>')
+      return
+    end
+    vim.ui.input({ prompt = 'New alias for list ' .. num .. ': ' }, function(input)
+      if input and input ~= '' then
+        if rename_list(num, input) then
+          print('List ' .. num .. ' renamed to: ' .. input)
+        else
+          print('List ' .. num .. ' not found')
+        end
+      end
+    end)
+  end, {
+    nargs = 1,
+    desc = 'Rename a list alias',
   })
 
   vim.api.nvim_create_user_command('ListShow', function()
