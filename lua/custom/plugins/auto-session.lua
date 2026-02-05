@@ -1,6 +1,6 @@
 return {
   'rmagatti/auto-session',
-  lazy = false,
+  event = 'VimEnter',
   config = function()
     require('auto-session').setup({
       log_level = 'error',

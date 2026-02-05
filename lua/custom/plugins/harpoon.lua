@@ -14,8 +14,10 @@ return {
     })
     
     -- Helper function to safely get a harpoon list
+    -- Uses the selected list from the number manager (harpoonlist.lua)
     local function get_list()
-      return harpoon:list()
+      local list_name = vim.g.selected_list or 'harpoonlist_0'
+      return harpoon:list(list_name)
     end
     
     vim.keymap.set('n', '<leader>ha', function()

@@ -18,7 +18,7 @@ return {
   {
     'CopilotC-Nvim/CopilotChat.nvim',
     branch = 'main',
-    lazy = false,
+    cmd = { 'CopilotChat', 'CopilotChatToggle', 'CopilotChatExplain', 'CopilotChatReview', 'CopilotChatFix', 'CopilotChatOptimize', 'CopilotChatDocs', 'CopilotChatTests', 'CopilotChatFixDiagnostic', 'CopilotChatCommit', 'CopilotChatCommitStaged' },
     dependencies = {
       { 'zbirenbaum/copilot.lua' },
       { 'nvim-lua/plenary.nvim' },
@@ -37,6 +37,10 @@ return {
       auto_insert_mode = false,
       clear_chat_on_new_prompt = false,
       context = 'buffers',
+      
+      -- Set default mode to 'agent' instead of 'ask'
+      -- Agent mode allows Copilot to perform actions, while ask mode only answers questions
+      answer_mode = 'agent',
       
       prompts = {
         Explain = {

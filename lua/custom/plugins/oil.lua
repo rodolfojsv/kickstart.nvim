@@ -1,9 +1,9 @@
 return {
   'stevearc/oil.nvim',
-  lazy = false,
   keys = {
     { '-', '<CMD>Oil<CR>', desc = 'Open parent directory' },
   },
+  event = 'VimEnter',  -- Load early for directory handling
   config = function()
     require('oil').setup {
       skip_confirm_for_simple_edits = true,
