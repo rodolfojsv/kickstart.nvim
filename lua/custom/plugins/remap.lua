@@ -18,6 +18,7 @@ return {
   vim.keymap.set('x', '<leader>p', [["_dP]]),
   vim.keymap.set('n', '<A-S-a>', '<C-a>'),
   vim.keymap.set('n', '<A-S-x>', '<C-x>'),
+  vim.keymap.set('n', '<leader>cc', ':CodeCompanionChat<CR>', { desc = '[C]ode [C]ompanion' }),
 --  vim.keymap.set('n', '<leader><C-s>', '<cmd>:so ~/.config/nvim/lua/snippets/basiccssnipppets.lua<CR>'),
   vim.keymap.set('n', '<leader>cg', function()
     vim.fn.jobstart('powershell -ExecutionPolicy Bypass -File C:\\Dev\\NeoSMIB\\setup.ps1', {
