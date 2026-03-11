@@ -24,7 +24,7 @@ return {
           csharp_enable_inlay_hints_for_implicit_object_creation = true,
         },
         ['csharp|code_lens'] = {
-          dotnet_enable_references_code_le ns = true,
+          dotnet_enable_references_code_lens = true,
         },
         ['csharp|completion'] = {
           dotnet_show_completion_items_from_unimported_namespaces = true,
