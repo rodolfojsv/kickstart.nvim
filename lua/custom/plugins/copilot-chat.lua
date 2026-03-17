@@ -5,8 +5,10 @@
 -- Depends on copilot.lua being authenticated (:Copilot auth).
 
 return {
-  dir = 'C:/Dev/copilot-chat.nvim',
-  name = 'copilot-chat-nvim',
+  --'rodolfojsv/copilot-cli.nvim',
+  -- For local development, uncomment the line below and comment out the line above
+  dir = 'C:/Dev/copilot-cli.nvim',
+  name = 'copilot-cli-nvim',
   lazy = false,
 
   config = function()
