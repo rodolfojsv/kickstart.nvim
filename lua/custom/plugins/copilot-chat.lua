@@ -5,7 +5,7 @@
 -- Depends on copilot.lua being authenticated (:Copilot auth).
 
 return {
-  dir = vim.fn.stdpath('config'),
+  dir = 'C:/Dev/copilot-chat.nvim',
   name = 'copilot-chat-nvim',
   lazy = false,
 
@@ -20,6 +20,16 @@ return {
       },
       chat_width = 80,
       input_height = 5,
+      agent_dirs = {
+        'C:/Dev/NeoSMIB/SMIB',  -- looks for .github/agents/ here
+      },
+      allowed_agents = {
+        'research_codebase',
+        'create_plan',
+        'iterate_plan',
+        'implement_plan',
+      },
+      thoughts_dir = 'C:/Dev/NeoSMIB/SMIB/thoughts',
     })
 
     -- ── Keymaps ─────────────────────────────────────────────────────
@@ -30,5 +40,11 @@ return {
     vim.keymap.set('n', '<leader>pm', '<cmd>CopilotChatModel<CR>', { desc = '[P]ilot Chat [M]odel' })
     vim.keymap.set('n', '<leader>pr', '<cmd>CopilotChatReset<CR>', { desc = '[P]ilot Chat [R]eset' })
     vim.keymap.set('n', '<leader>ps', '<cmd>CopilotChatStop<CR>',  { desc = '[P]ilot Chat [S]top' })
+    vim.keymap.set('n', '<leader>pp', function()
+      require('copilot-chat').apply_last_code_block()
+    end, { desc = '[P]ilot a[P]ply last code block' })
+    vim.keymap.set('n', '<leader>pn', '<cmd>CopilotChatNewSession<CR>', { desc = '[P]ilot [N]ew session' })
+    vim.keymap.set('n', '<leader>pl', '<cmd>CopilotChatSessions<CR>',  { desc = '[P]ilot [L]ist sessions' })
+    vim.keymap.set('n', '<leader>pi', '<cmd>CopilotChatAgent<CR>',     { desc = '[P]ilot agent p[I]cker' })
   end,
 }
