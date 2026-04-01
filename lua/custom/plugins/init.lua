@@ -12,7 +12,7 @@ return {
   'tris203/precognition.nvim',
   'justinhj/battery.nvim',
   'nvim-treesitter/nvim-treesitter-context',
-  { 'rodolfojsv/reminders.nvim', branch = 'main' },
+  { dir = 'C:/Dev/reminders.nvim', name = 'reminders.nvim' },
   { 'kyazdani42/nvim-web-devicons', lazy = true },
   { 'aymericbeaumet/vim-symlink', dependencies = { 'moll/vim-bbye' } },
   {
