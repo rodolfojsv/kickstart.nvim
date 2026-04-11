@@ -9,8 +9,6 @@ return {
   'tpope/vim-repeat',
   'tpope/vim-surround',
   'tpope/vim-unimpaired',
-  'tris203/precognition.nvim',
-  'justinhj/battery.nvim',
   'nvim-treesitter/nvim-treesitter-context',
   { 'rodolfojsv/reminders.nvim', branch = 'main' },
   { 'kyazdani42/nvim-web-devicons', lazy = true },

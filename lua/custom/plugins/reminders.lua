@@ -1,5 +1,5 @@
 return {
-  require('reminders').setup { directory_path = '/Users/rodolfojosesilvavazquez/Development/reminders' },
+  require('reminders').setup { directory_path = '/home/rodo/Development/reminders' },
   vim.keymap.set('n', '<leader>rme', ':RemindMeEvery ', { desc = '[R]emind [M]e [E]very and type minutes' }),
   vim.keymap.set('n', '<leader>rma', ':RemindMeAt ', { desc = '[R]emind [M]e [A]t and type hour of day (24h)' }),
   vim.keymap.set('n', '<leader>rmi', ':RemindMeIn ', { desc = '[R]emind [M]e [I]n and type minutes' }),
