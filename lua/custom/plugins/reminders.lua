@@ -1,5 +1,17 @@
 return {
-  require('reminders').setup { directory_path = 'C:\\Users\\lph15526\\OneDrive - IGT\\Documents\\reminders' },
+  require('reminders').setup {
+    directory_path = 'C:\\Users\\lph15526\\OneDrive - IGT\\Documents\\reminders',
+    briefing = {
+      name = 'Rodolfo',
+      on_startup = true
+    },
+    jira = {
+      enabled = true,
+      bin = 'C:\\Users\\lph15526\\AppData\\Local\\jira-cli\\bin\\jira.exe',
+      host = 'https://igt-casinosystems.atlassian.net',
+      exclude_statuses = { 'Done', 'Closed' },
+    },
+  },
   vim.keymap.set('n', '<leader>rme', ':RemindMeEvery ', { desc = '[R]emind [M]e [E]very and type minutes' }),
   vim.keymap.set('n', '<leader>rma', ':RemindMeAt ', { desc = '[R]emind [M]e [A]t and type hour of day (24h)' }),
   vim.keymap.set('n', '<leader>rmi', ':RemindMeIn ', { desc = '[R]emind [M]e [I]n and type minutes' }),
