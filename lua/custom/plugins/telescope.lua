@@ -250,10 +250,23 @@ return {
       builtin.find_files(opts)
     end
 
+    -- Dedicated markdown file finder (searches broadly with --no-ignore)
+    local function find_markdown_files()
+      local opts = {}
+      if is_in_neosmib() then
+        opts.cwd = 'C:\\Dev\\NeoSMIB\\SMIB'
+      end
+      opts.no_ignore = true
+      opts.find_command = { 'fd', '--type', 'f', '--extension', 'md', '--color', 'never' }
+      opts.prompt_title = 'Find Markdown Files'
+      builtin.find_files(opts)
+    end
+
     -- Standard keymaps
     vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
     vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
     vim.keymap.set('n', '<leader>sf', smart_find_files, { desc = '[S]earch [F]iles (smart)' })
+    vim.keymap.set('n', '<leader>sm', find_markdown_files, { desc = '[S]earch [M]arkdown files' })
     vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
     vim.keymap.set('n', '<leader>sw', mbe2_grep_string, { desc = '[S]earch current [W]ord' })
     vim.keymap.set('n', '<leader>sg', mbe2_live_grep, { desc = '[S]earch by [G]rep' })
