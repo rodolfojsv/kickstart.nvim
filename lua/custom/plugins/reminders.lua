@@ -3,7 +3,7 @@ return {
     directory_path = 'C:\\Users\\lph15526\\OneDrive - IGT\\Documents\\reminders',
     briefing = {
       name = 'Rodolfo',
-      on_startup = true
+      on_startup = "once_daily"
     },
     jira = {
       enabled = true,
@@ -21,4 +21,5 @@ return {
   vim.keymap.set('n', '<leader>rmra', ':ReminderRemoveAt ', { desc = '[R]e[m]inder [R]emove [A]t' }),
   vim.keymap.set('n', '<leader>rmfo', ':ReminderFocusModeOff<CR>', { desc = '[R]e[m]inder [F]ocusMode [O]ff' }),
   vim.keymap.set('n', '<leader>rmfm', ':ReminderFocusModeOn<CR>', { desc = '[R]e[m]inder [F]ocus[M]ode On' }),
+  vim.keymap.set('n', '<leader>rmb', ':ReminderBriefing<CR>', { desc = '[R]e[m]inder [B]riefing' }),
 }

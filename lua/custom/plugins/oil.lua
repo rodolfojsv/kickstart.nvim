@@ -21,6 +21,12 @@ return {
       },
     }
     vim.keymap.set('n', '-', '<CMD>Oil<CR>', { desc = 'Open parent directory' })
+    vim.keymap.set('n', '<leader>yp', function()
+      local dir = require('oil').get_current_dir()
+      if dir then
+        vim.fn.setreg('+', dir)
+      end
+    end, { desc = 'Yank oil current directory path' })
     
     -- Open oil on startup only when a directory argument is provided
     vim.api.nvim_create_autocmd('VimEnter', {
