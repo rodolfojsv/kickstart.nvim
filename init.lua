@@ -484,12 +484,7 @@ require('lazy').setup({
       -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
       {
         'mason-org/mason.nvim',
-        opts = {
-          registries = {
-            'github:mason-org/mason-registry',
-            'github:Crashdummyy/mason-registry',
-          },
-        },
+        opts = {},
       },
       'mason-org/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
@@ -888,18 +883,16 @@ require('lazy').setup({
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
     -- 'folke/tokyonight.nvim',
     'catppuccin/nvim',
+    name = 'catppuccin',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require('tokyonight').setup {
-        styles = {
-          comments = { italic = false }, -- Disable italics in comments
-        },
+      require('catppuccin').setup {
+        no_italic = true, -- Disable italics (e.g. in comments)
       }
 
       -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+      -- Catppuccin has several flavours: 'catppuccin-latte', 'catppuccin-frappe',
+      -- 'catppuccin-macchiato', 'catppuccin-mocha'.
       vim.cmd.colorscheme 'catppuccin-mocha'
     end,
   },
@@ -925,41 +918,43 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
-
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
+      -- NOTE: statusline is provided by lualine (see lua/custom/plugins/lualine.lua)
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
   { -- Highlight, edit, and navigate code
+    -- NOTE: We use the `main` branch because Neovim 0.12+ is not supported by the
+    -- legacy `master` branch. The `main` branch has a different API: highlighting,
+    -- folds and indent are enabled per-buffer (see the FileType autocmd below)
+    -- rather than via an `opts.highlight`/`opts.indent` table.
     'nvim-treesitter/nvim-treesitter',
+    branch = 'main',
+    lazy = false, -- main branch does not support lazy-loading
     build = ':TSUpdate',
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     config = function()
-      require('nvim-treesitter').setup {
-        ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-        auto_install = true,
+      -- Parsers/queries to install. Tweak this list to your languages.
+      require('nvim-treesitter').install {
+        'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc',
+        -- Go + TypeScript stack
+        'go', 'gomod', 'gosum', 'gowork', 'typescript', 'tsx', 'javascript', 'json', 'yaml', 'css',
       }
+
+      -- Enable treesitter highlighting + indentation per buffer.
+      -- `vim.treesitter.start` infers the language from the filetype and is a
+      -- no-op (caught by pcall) for filetypes without an installed parser.
+      vim.api.nvim_create_autocmd('FileType', {
+        group = vim.api.nvim_create_augroup('treesitter-start', { clear = true }),
+        callback = function(args)
+          if pcall(vim.treesitter.start, args.buf) then
+            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
+        end,
+      })
     end,
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+    -- Other modules to explore: nvim-treesitter-context (already installed),
+    -- and https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the

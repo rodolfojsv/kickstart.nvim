@@ -1,7 +1,7 @@
 return {
   'hoob3rt/lualine.nvim',
   dependencies = {
-    'folke/tokyonight.nvim',
+    'catppuccin/nvim',
   },
   config = function()
     -- use emotes for mode names
@@ -21,7 +21,7 @@ return {
     }
     require('lualine').setup {
       options = {
-        theme = 'tokyonight-night',
+        theme = 'catppuccin',
         globalstatus = true,
       },
       sections = {

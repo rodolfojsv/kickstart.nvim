@@ -7,14 +7,15 @@ return {
   'rcarriga/nvim-notify',
   'tpope/vim-eunuch',
   'tpope/vim-repeat',
-  'tpope/vim-surround',
   'tpope/vim-unimpaired',
   'nvim-treesitter/nvim-treesitter-context',
   { 'rodolfojsv/reminders.nvim', branch = 'main' },
-  { 'kyazdani42/nvim-web-devicons', lazy = true },
   { 'aymericbeaumet/vim-symlink', dependencies = { 'moll/vim-bbye' } },
   {
-    'norcalli/nvim-colorizer.lua',
+    -- Maintained fork of norcalli/nvim-colorizer.lua (original is abandoned and
+    -- uses APIs removed in Neovim 0.12, which caused deprecation warnings).
+    'catgoose/nvim-colorizer.lua',
+    event = 'VeryLazy',
     config = function()
       require('colorizer').setup()
     end,
