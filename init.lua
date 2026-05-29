@@ -722,14 +722,21 @@ require('lazy').setup({
 
       require('mason-lspconfig').setup {
         ensure_installed = {},
-        automatic_installation = false,
+        -- We enable servers ourselves below via vim.lsp.enable, so don't let
+        -- mason-lspconfig auto-enable them as well.
+        automatic_enable = false,
       }
 
-      -- Set up each server with capabilities from blink.cmp
+      -- Configure and enable each server via Neovim's native LSP API (0.11+).
+      -- This replaces the deprecated `require('lspconfig')[name].setup()`.
+      -- nvim-lspconfig still ships the base server definitions that
+      -- `vim.lsp.config` reads; we just layer our overrides (and blink.cmp
+      -- capabilities) on top.
+      vim.lsp.config('*', { capabilities = capabilities })
       for server_name, server in pairs(servers) do
-        server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-        require('lspconfig')[server_name].setup(server)
+        vim.lsp.config(server_name, server)
       end
+      vim.lsp.enable(vim.tbl_keys(servers))
     end,
   },
 
