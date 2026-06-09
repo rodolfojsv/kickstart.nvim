@@ -138,7 +138,7 @@ return {
         {
       '<leader><C-s>',
       function()
-        jump_to_dir(vim.fn.expand('~/Dev/NeoSMIB'))
+        jump_to_dir(vim.fn.expand('~/WorkDev/NeoSMIB'))
       end,
       desc = 'Jump to NeoSMIB folder',
     },

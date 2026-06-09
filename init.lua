@@ -872,22 +872,34 @@ require('lazy').setup({
   },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    lazy = false,
     build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-    opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'yaml' },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
-      indent = { enable = true, disable = { 'ruby' } },
-    },
+    -- nvim-treesitter v1.0+ rewrote the API; configs module is gone.
+    -- Highlighting/indent are now handled via Neovim's built-in vim.treesitter.
+    config = function()
+      -- Ensure core parsers are installed
+      require('nvim-treesitter').install({
+        'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'yaml',
+      })
+
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function(args)
+          local ft = vim.bo[args.buf].filetype
+          -- Auto-install parser for any filetype if available
+          local lang = vim.treesitter.language.get_lang(ft)
+          if lang then
+            require('nvim-treesitter').install({ lang })
+          end
+          -- Enable treesitter highlighting (falls back silently if no parser)
+          pcall(vim.treesitter.start, args.buf)
+          -- Enable treesitter indentation (experimental) for non-ruby filetypes
+          if ft ~= 'ruby' then
+            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
+        end,
+      })
+    end,
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
     --

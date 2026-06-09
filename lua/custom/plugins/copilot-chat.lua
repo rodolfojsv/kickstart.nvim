@@ -23,7 +23,7 @@ return {
       chat_width = 80,
       input_height = 5,
       agent_dirs = {
-        vim.fn.expand('~/Dev/NeoSMIB/SMIB'),  -- looks for .github/agents/ here
+        vim.fn.expand('~/WorkDev/NeoSMIB/SMIB'),  -- looks for .github/agents/ here
       },
       allowed_agents = {
         'research_codebase',
@@ -31,7 +31,7 @@ return {
         'iterate_plan',
         'implement_plan',
       },
-      thoughts_dir = vim.fn.expand('~/Dev/NeoSMIB/SMIB/thoughts'),
+      thoughts_dir = vim.fn.expand('~/WorkDev/NeoSMIB/SMIB/thoughts'),
     })
 
     -- ── Keymaps ─────────────────────────────────────────────────────
