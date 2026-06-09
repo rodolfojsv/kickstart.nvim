@@ -1,13 +1,13 @@
 return {
   require('reminders').setup {
-    directory_path = 'C:\\Users\\lph15526\\OneDrive - IGT\\Documents\\reminders',
+    directory_path = vim.fn.expand('~/Documents/reminders'),
     briefing = {
       name = 'Rodolfo',
       on_startup = "once_daily"
     },
     jira = {
       enabled = true,
-      bin = 'C:\\Users\\lph15526\\AppData\\Local\\jira-cli\\bin\\jira.exe',
+      bin = vim.fn.expand('~/.local/bin/jira'),
       host = 'https://igt-casinosystems.atlassian.net',
       jql = "assignee=currentUser() AND resolution=Unresolved AND project IN (SMIB, CCCB)",
       exclude_statuses = { 'Done', 'Closed', 'DESCOPED' },

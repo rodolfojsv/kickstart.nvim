@@ -16,9 +16,9 @@ local function jump_to_dir(dir)
   vim.defer_fn(function()
     -- Get current directory and manually escape it using URL encoding
     local cwd = vim.fn.getcwd()
-    local clean_cwd = cwd:gsub('\\+$', '') -- Remove trailing backslash
-    -- Encode special characters: backslash, colon, dot, and space
-    local escaped = clean_cwd:gsub('\\', '%%5C'):gsub(':', '%%3A'):gsub('%.', '%%2E'):gsub(' ', '%%20')
+    local clean_cwd = cwd:gsub('/+$', '') -- Remove trailing slash
+    -- Encode special characters: dot and space
+    local escaped = clean_cwd:gsub('%.', '%%2E'):gsub(' ', '%%20')
 
     local session_root = vim.fn.stdpath 'data' .. '/sessions/'
     local session_file = session_root .. escaped .. '.vim'
@@ -48,14 +48,14 @@ return {
 
   -- Specific folders to add directly (depth 0)
   local specific_folders = {
-    vim.fn.expand('~\\AppData\\Local\\nvim'),
-    vim.fn.expand('~\\AppData\\Roaming\\alacritty'),
+    vim.fn.expand('~/.config/nvim'),
+    vim.fn.expand('~/.config/alacritty'),
   }
 
   -- Search paths for recursive search
   local search_paths = {
-    'C:\\Dev',
-    'C:\\Logs',
+    vim.fn.expand('~/Dev'),
+    vim.fn.expand('~/Logs'),
   }
 
   -- Get all directories
@@ -73,7 +73,7 @@ return {
     local cmd_parts = { 'fd', '--type', 'd', '--max-depth', '1', '--hidden', '--exclude', '.git' }
     for _, path in ipairs(search_paths) do
       table.insert(cmd_parts, '--search-path')
-      table.insert(cmd_parts, '"' .. path .. '"')
+      table.insert(cmd_parts, path)
     end
     
     local cmd = table.concat(cmd_parts, ' ')
@@ -82,9 +82,9 @@ return {
     local handle = io.popen(cmd)
     if handle then
       for line in handle:lines() do
-        -- Trim whitespace and remove trailing backslashes
+        -- Trim whitespace and remove trailing slashes
         line = line:match("^%s*(.-)%s*$")
-        line = line:gsub("\\+$", "")
+        line = line:gsub("/+$", "")
         
         if line and line ~= '' and vim.fn.isdirectory(line) == 1 then
           table.insert(all_dirs, line)
@@ -131,14 +131,14 @@ return {
     {
       '<leader><C-n>',
       function()
-        jump_to_dir('C:\\Dev\\notes')
+        jump_to_dir(vim.fn.expand('~/Dev/notes'))
       end,
       desc = 'Jump to notes folder',
     },
         {
       '<leader><C-s>',
       function()
-        jump_to_dir('C:\\Dev\\NeoSMIB')
+        jump_to_dir(vim.fn.expand('~/Dev/NeoSMIB'))
       end,
       desc = 'Jump to NeoSMIB folder',
     },

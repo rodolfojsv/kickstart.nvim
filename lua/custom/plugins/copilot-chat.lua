@@ -7,7 +7,7 @@
 return {
   --'rodolfojsv/copilot-cli.nvim',
   -- For local development, uncomment the line below and comment out the line above
-  dir = 'C:/Dev/copilot-cli.nvim',
+  dir = vim.fn.expand('~/Dev/copilot-cli.nvim'),
   name = 'copilot-cli-nvim',
   lazy = false,
 
@@ -23,7 +23,7 @@ return {
       chat_width = 80,
       input_height = 5,
       agent_dirs = {
-        'C:/Dev/NeoSMIB/SMIB',  -- looks for .github/agents/ here
+        vim.fn.expand('~/Dev/NeoSMIB/SMIB'),  -- looks for .github/agents/ here
       },
       allowed_agents = {
         'research_codebase',
@@ -31,7 +31,7 @@ return {
         'iterate_plan',
         'implement_plan',
       },
-      thoughts_dir = 'C:/Dev/NeoSMIB/SMIB/thoughts',
+      thoughts_dir = vim.fn.expand('~/Dev/NeoSMIB/SMIB/thoughts'),
     })
 
     -- ── Keymaps ─────────────────────────────────────────────────────

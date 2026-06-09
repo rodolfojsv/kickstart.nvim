@@ -12,7 +12,7 @@ return {
   'tris203/precognition.nvim',
   'justinhj/battery.nvim',
   'nvim-treesitter/nvim-treesitter-context',
-  { dir = 'C:/Dev/reminders.nvim', name = 'reminders.nvim' },
+  { dir = vim.fn.expand('~/Dev/reminders.nvim'), name = 'reminders.nvim' },
   { 'kyazdani42/nvim-web-devicons', lazy = true },
   { 'aymericbeaumet/vim-symlink', dependencies = { 'moll/vim-bbye' } },
   {

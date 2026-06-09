@@ -18,7 +18,8 @@ return {
     -- Helper function to detect if we're in NeoSMIB directory
     local function is_in_neosmib()
       local cwd = vim.fn.getcwd()
-      return cwd:match 'C:\\Dev\\NeoSMIB' ~= nil or cwd:match 'C:/Dev/NeoSMIB' ~= nil
+      local neosmib = vim.fn.expand('~/Dev/NeoSMIB')
+      return cwd:find(neosmib, 1, true) ~= nil
     end
 
     -- Path display function to trim paths after MBE2
@@ -76,7 +77,7 @@ return {
           show_unindexed = true,
           ignore_patterns = { '*.git/*', '*/tmp/*', '*/node_modules/*' },
           workspaces = {
-            ['MBE2'] = 'C:\\Dev\\NeoSMIB\\SMIB\\EGS\\ABS\\source\\Software\\MBE2',
+            ['MBE2'] = vim.fn.expand('~/Dev/NeoSMIB/SMIB/EGS/ABS/source/Software/MBE2'),
           },
         },
       },
@@ -92,7 +93,7 @@ return {
     local function mbe2_live_grep(opts)
       opts = opts or {}
       if is_in_neosmib() then
-        opts.cwd = 'C:\\Dev\\NeoSMIB\\SMIB\\EGS\\ABS\\source\\Software\\MBE2'
+        opts.cwd = vim.fn.expand('~/Dev/NeoSMIB/SMIB/EGS/ABS/source/Software/MBE2')
       end
       builtin.live_grep(opts)
     end
@@ -100,7 +101,7 @@ return {
     local function mbe2_find_files(opts)
       opts = opts or {}
       if is_in_neosmib() then
-        opts.cwd = 'C:\\Dev\\NeoSMIB\\SMIB\\EGS\\ABS\\source\\Software\\MBE2'
+        opts.cwd = vim.fn.expand('~/Dev/NeoSMIB/SMIB/EGS/ABS/source/Software/MBE2')
 
         -- Create an entry maker that marks UnitTest entries
         local make_entry = require 'telescope.make_entry'
@@ -155,7 +156,7 @@ return {
     local function mbe2_grep_string(opts)
       opts = opts or {}
       if is_in_neosmib() then
-        opts.cwd = 'C:\\Dev\\NeoSMIB\\SMIB\\EGS\\ABS\\source\\Software\\MBE2'
+        opts.cwd = vim.fn.expand('~/Dev/NeoSMIB/SMIB/EGS/ABS/source/Software/MBE2')
       end
       builtin.grep_string(opts)
     end
@@ -168,7 +169,7 @@ return {
       end
 
       local opts = {
-        cwd = 'C:\\Dev\\NeoSMIB\\SMIB\\EGS\\ABS\\source\\Software\\MBE2',
+        cwd = vim.fn.expand('~/Dev/NeoSMIB/SMIB/EGS/ABS/source/Software/MBE2'),
         path_display = custom_path_display,
       }
 
@@ -254,7 +255,7 @@ return {
     local function find_markdown_files()
       local opts = {}
       if is_in_neosmib() then
-        opts.cwd = 'C:\\Dev\\NeoSMIB\\SMIB'
+        opts.cwd = vim.fn.expand('~/Dev/NeoSMIB/SMIB')
       end
       opts.no_ignore = true
       opts.find_command = { 'fd', '--type', 'f', '--extension', 'md', '--color', 'never' }
