@@ -1,6 +1,7 @@
 return {
   'seblyng/roslyn.nvim',
   ft = 'cs',
+  dependencies = { 'mason-org/mason.nvim' },
   ---@module 'roslyn.config'
   ---@type RoslynNvimConfig
   opts = {

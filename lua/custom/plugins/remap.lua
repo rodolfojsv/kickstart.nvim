@@ -20,20 +20,6 @@ return {
   vim.keymap.set('n', '<A-S-x>', '<C-x>'),
   vim.keymap.set('n', '<leader>cc', ':CodeCompanionChat<CR>', { desc = '[C]ode [C]ompanion' }),
 --  vim.keymap.set('n', '<leader><C-s>', '<cmd>:so ~/.config/nvim/lua/snippets/basiccssnipppets.lua<CR>'),
-  vim.keymap.set('n', '<leader>cg', function()
-    vim.fn.jobstart('powershell -ExecutionPolicy Bypass -File C:\\Dev\\NeoSMIB\\setup.ps1', {
-      on_exit = function(_, code)
-        if code == 0 then
-          vim.notify('✓ CMake setup completed!', vim.log.levels.INFO)
-          -- Optional: refresh compile_commands.json in LSP
-          vim.cmd 'LspRestart'
-        else
-          vim.notify('✗ CMake setup failed', vim.log.levels.ERROR)
-        end
-      end,
-    })
-    vim.notify('Running CMake setup...', vim.log.levels.INFO)
-  end, { noremap = true, desc = '[C]make [G]enerate' }),
   vim.keymap.set('i', '<F18>', function()
     require('luasnip').jump(1)
   end),

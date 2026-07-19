@@ -585,6 +585,12 @@ require('lazy').setup({
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+      local smib_workspace = (vim.env.NEOSMIB_WORKSPACE or 'C:\\Dev\\NeoSMIB'):gsub('\\', '/')
+      local clangd_path_file = smib_workspace .. '/clangd-path.txt'
+      local clangd_toolchain_path
+      if vim.fn.filereadable(clangd_path_file) == 1 then
+        clangd_toolchain_path = vim.trim(table.concat(vim.fn.readfile(clangd_path_file), ''))
+      end
       local servers = {
         -- csharp_ls = {},
         clangd = {
@@ -596,16 +602,16 @@ require('lazy').setup({
             '--completion-style=detailed',
             '--function-arg-placeholders',
             '--fallback-style=llvm',
+            '--compile-commands-dir=' .. smib_workspace,
           },
           init_options = {
             usePlaceholders = true,
             completeUnimported = true,
             clangdFileStatus = true,
           },
-          -- Windows-specific: Use forward slashes for paths
-          root_dir = function(fname)
-            return require('lspconfig.util').root_pattern('compile_commands.json', 'compile_flags.txt', '.git', 'CMakeLists.txt')(fname) or vim.fn.getcwd()
-          end,
+          cmd_env = clangd_toolchain_path and {
+            PATH = clangd_toolchain_path .. ';' .. vim.env.PATH,
+          } or nil,
         },
         -- gopls = {},
         -- pyright = {},
@@ -655,19 +661,14 @@ require('lazy').setup({
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
+      for server_name, server in pairs(servers) do
+        server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+        vim.lsp.config(server_name, server)
+      end
+
       require('mason-lspconfig').setup {
-        ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-        automatic_installation = false,
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for ts_ls)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
+        ensure_installed = {}, -- mason-tool-installer handles installation above
+        automatic_enable = vim.tbl_keys(servers),
       }
     end,
   },
@@ -872,6 +873,7 @@ require('lazy').setup({
   },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    branch = 'master',
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
