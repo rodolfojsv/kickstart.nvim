@@ -28,18 +28,30 @@ local function projects()
   return names
 end
 
-local function terminal(script, arguments)
+local function terminal(script, arguments, options)
+  options = options or {}
   local command = {
     'powershell.exe',
-    '-NoExit',
     '-ExecutionPolicy',
     'Bypass',
     '-File',
     workspace .. '\\' .. script,
   }
+  if options.keep_open ~= false then
+    table.insert(command, 2, '-NoExit')
+  end
   vim.list_extend(command, arguments or {})
   vim.cmd 'botright new'
-  vim.fn.termopen(command, { cwd = workspace })
+  vim.fn.termopen(command, {
+    cwd = workspace,
+    on_exit = function(_, code)
+      if options.on_exit then
+        vim.schedule(function()
+          options.on_exit(code)
+        end)
+      end
+    end,
+  })
   vim.cmd 'startinsert'
 end
 
@@ -74,7 +86,22 @@ end
 
 local function setup()
   vim.keymap.set('n', '<leader>cg', function()
-    terminal('setup.ps1', { '-BuildType', 'Debug' })
+    select_project('Generate compile commands for:', false, false, function(choice)
+      terminal('setup.ps1', { '-BuildType', 'Debug', '-Projects', choice.project }, {
+        keep_open = false,
+        on_exit = function(code)
+          if code ~= 0 then
+            vim.notify('CMake generation failed', vim.log.levels.ERROR)
+            return
+          end
+          vim.lsp.enable('clangd', false)
+          vim.defer_fn(function()
+            vim.lsp.enable('clangd', true)
+          end, 200)
+          vim.notify('clangd target: ' .. choice.project, vim.log.levels.INFO)
+        end,
+      })
+    end)
   end, { desc = '[C]Make [G]enerate compile commands' })
 
   vim.keymap.set('n', '<leader>cp', function()
