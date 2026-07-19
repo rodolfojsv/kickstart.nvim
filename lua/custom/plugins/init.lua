@@ -12,7 +12,8 @@ return {
   'tris203/precognition.nvim',
   'justinhj/battery.nvim',
   'nvim-treesitter/nvim-treesitter-context',
-  { dir = 'C:/Dev/reminders.nvim', name = 'reminders.nvim' },
+  { 'rodolfojsv/reminders.nvim', name = 'reminders.nvim' },
+  -- { dir = 'C:/Dev/reminders.nvim', name = 'reminders.nvim' }, -- Local development
   { 'kyazdani42/nvim-web-devicons', lazy = true },
   { 'aymericbeaumet/vim-symlink', dependencies = { 'moll/vim-bbye' } },
   {

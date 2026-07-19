@@ -1,7 +1,6 @@
 return {
-  --'rodolfojsv/log-filter.nvim',
-  -- For local development, uncomment the line below and comment out the line above
-  dir = 'C:/Dev/logfilter.nvim',
+  'rodolfojsv/log-filter.nvim',
+  -- dir = 'C:/Dev/logfilter.nvim', -- Local development
   config = function()
   require('log-filter').setup {
     history_file = 'C:/temp/nvim_log_filter_history.txt',

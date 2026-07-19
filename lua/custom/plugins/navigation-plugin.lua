@@ -1,8 +1,6 @@
 return {
-  -- For local development
-  dir = 'C:/Dev/navigation',
-  -- For GitHub version, comment out the line above and uncomment below:
-  -- 'rodolfojsv/navigation.nvim',
+  'rodolfojsv/navigation.nvim',
+  -- dir = 'C:/Dev/navigation', -- Local development
   config = function()
     require('navigation').setup({
       nav_file = 'C:\\Dev\\navigation.nvim',

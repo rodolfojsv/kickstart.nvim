@@ -1,8 +1,7 @@
-﻿return {
-  -- For local development
-  dir = 'C:/Dev/LuaNeoParse',
-  -- For GitHub version, comment out the line above and uncomment below:
-  -- 'yourusername/LuaNeoParse',
+return {
+  'rodolfojsv/LuaNeoParse',
+  enabled = false, -- No accessible GitHub repository currently exists.
+  -- dir = 'C:/Dev/LuaNeoParse', -- Local development
   config = function()
     require('LuaNeoParse').setup({
       -- Optional: Customize keymaps

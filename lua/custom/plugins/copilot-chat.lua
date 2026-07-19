@@ -5,9 +5,8 @@
 -- Depends on copilot.lua being authenticated (:Copilot auth).
 
 return {
-  --'rodolfojsv/copilot-cli.nvim',
-  -- For local development, uncomment the line below and comment out the line above
-  dir = 'C:/Dev/copilot-cli.nvim',
+  'rodolfojsv/copilot-cli.nvim',
+  -- dir = 'C:/Dev/copilot-cli.nvim', -- Local development
   name = 'copilot-cli-nvim',
   lazy = false,
 
