@@ -47,14 +47,7 @@ return {
             shortening_target = 70,
           },
         },
-        lualine_x = {
-          {
-            function() return require('copilot-chat').status() end,
-            cond = function() return require('copilot-chat').is_streaming() end,
-            color = { fg = '#f7768e' },
-          },
-          'encoding', 'filetype'
-        },
+        lualine_x = { 'encoding', 'filetype' },
         lualine_z = { 'location' },
       },
       tabline = {
