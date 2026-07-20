@@ -146,7 +146,21 @@ return {
             -- Use original sorter for scoring with correct parameters
             return original_sorter:scoring_function(prompt, line, entry)
           end,
-          highlighter = original_sorter.highlighter,
+          init = function()
+            original_sorter:_init()
+          end,
+          start = function(_, prompt)
+            original_sorter:_start(prompt)
+          end,
+          finish = function(_, prompt)
+            original_sorter:_finish(prompt)
+          end,
+          destroy = function()
+            original_sorter:_destroy()
+          end,
+          highlighter = function(_, prompt, display)
+            return original_sorter:highlighter(prompt, display)
+          end,
         }
       end
       builtin.find_files(opts)
@@ -244,7 +258,21 @@ return {
 
           return score
         end,
-        highlighter = original_sorter.highlighter,
+        init = function()
+          original_sorter:_init()
+        end,
+        start = function(_, prompt)
+          original_sorter:_start(prompt)
+        end,
+        finish = function(_, prompt)
+          original_sorter:_finish(prompt)
+        end,
+        destroy = function()
+          original_sorter:_destroy()
+        end,
+        highlighter = function(_, prompt, display)
+          return original_sorter:highlighter(prompt, display)
+        end,
       }
 
       builtin.find_files(opts)
