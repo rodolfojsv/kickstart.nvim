@@ -587,9 +587,19 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local smib_workspace = (vim.env.NEOSMIB_WORKSPACE or 'C:\\Dev\\NeoSMIB'):gsub('\\', '/')
       local clangd_path_file = smib_workspace .. '/clangd-path.txt'
-      local clangd_toolchain_path
+      local clangd_environment_file = smib_workspace .. '/clangd-env.json'
+      local clangd_environment
+      if vim.fn.filereadable(clangd_environment_file) == 1 then
+        local ok, environment = pcall(vim.json.decode, table.concat(vim.fn.readfile(clangd_environment_file), '\n'))
+        if ok and type(environment) == 'table' then
+          clangd_environment = environment
+        else
+          vim.notify('Ignoring invalid clangd environment file: ' .. clangd_environment_file, vim.log.levels.WARN)
+        end
+      end
       if vim.fn.filereadable(clangd_path_file) == 1 then
-        clangd_toolchain_path = vim.trim(table.concat(vim.fn.readfile(clangd_path_file), ''))
+        clangd_environment = clangd_environment or {}
+        clangd_environment.PATH = vim.trim(table.concat(vim.fn.readfile(clangd_path_file), '')) .. ';' .. vim.env.PATH
       end
       local servers = {
         -- csharp_ls = {},
@@ -610,9 +620,7 @@ require('lazy').setup({
             completeUnimported = true,
             clangdFileStatus = true,
           },
-          cmd_env = clangd_toolchain_path and {
-            PATH = clangd_toolchain_path .. ';' .. vim.env.PATH,
-          } or nil,
+          cmd_env = clangd_environment,
         },
         -- gopls = {},
         -- pyright = {},
